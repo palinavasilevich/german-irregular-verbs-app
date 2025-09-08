@@ -1,7 +1,9 @@
+import { Outlet } from "react-router-dom";
+
 export function App() {
   return (
-    <>
-      <h1>German Irregular Verbs</h1>
-    </>
+    <div>
+      <Outlet />
+    </div>
   );
 }
