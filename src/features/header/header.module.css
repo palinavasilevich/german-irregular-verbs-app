@@ -1,0 +1,12 @@
+.active {
+  position: relative;
+}
+
+.active::after {
+  content: "";
+  width: 100%;
+  border: 1px solid purple;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
