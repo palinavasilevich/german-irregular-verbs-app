@@ -1,5 +1,11 @@
+import { Hero } from "@/shared/components/hero";
+
 function MainPage() {
-  return <div>MainPage</div>;
+  return (
+    <>
+      <Hero />
+    </>
+  );
 }
 
 export const Component = MainPage;
