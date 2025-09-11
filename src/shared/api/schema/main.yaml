@@ -1,0 +1,148 @@
+openapi: 3.0.0
+info:
+  title: German Irregular Verbs API
+  description: API for learning German irregular verbs
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /verbs:
+    get:
+      summary: Get all verbs
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - infinitive
+        - name: isFavorite
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of verbs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerbsList"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+  /verbs/{id}:
+    get:
+      summary: Get a verb by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A verb
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Verb"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+components:
+  schemas:
+    Verb:
+      type: object
+      required:
+        - id
+        - infinitive
+        - past
+        - participle
+        - translation
+        - isFavorite
+      properties:
+        id:
+          type: string
+          example: "1"
+        infinitive:
+          type: string
+          example: "gehen"
+        past:
+          type: string
+          example: "ging"
+        participle:
+          type: string
+          example: "gegangen"
+        translation:
+          type: string
+          example: "to go"
+        isFavorite:
+          type: boolean
+          example: false
+
+    VerbsList:
+      type: object
+      required:
+        - list
+        - total
+        - totalPages
+      properties:
+        list:
+          type: array
+          items:
+            $ref: "#/components/schemas/Verb"
+        total:
+          type: integer
+          example: 42
+        totalPages:
+          type: integer
+          example: 5
+
+    Error:
+      type: object
+      required:
+        - message
+        - code
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+
+  responses:
+    NotFoundError:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    BadRequestError:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
