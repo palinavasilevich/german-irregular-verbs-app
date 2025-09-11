@@ -3,6 +3,7 @@ import { ROUTES } from "@/shared/constants/routes";
 import logoImg from "@/assets/img/logo.svg";
 
 import cls from "./header.module.css";
+import { cn } from "@/shared/lib/css";
 
 export const links = [
   {
@@ -30,7 +31,9 @@ export function AppHeader() {
             <NavLink
               key={link.title}
               to={link.path}
-              className={({ isActive }) => (isActive ? cls.active : "")}
+              className={({ isActive }) =>
+                isActive ? cn(cls.link, cls.active) : cls.link
+              }
             >
               {link.title}
             </NavLink>

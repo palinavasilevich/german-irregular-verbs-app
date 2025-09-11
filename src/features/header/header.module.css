@@ -1,12 +1,18 @@
-.active {
+.link {
   position: relative;
 }
 
-.active::after {
-  content: "";
-  width: 100%;
-  border: 1px solid purple;
+.active::after,
+.link:hover::after {
   position: absolute;
   bottom: 0;
   left: 0;
+
+  content: "";
+  width: 100%;
+  border: 1px solid purple;
+}
+
+.link:hover {
+  color: purple;
 }
