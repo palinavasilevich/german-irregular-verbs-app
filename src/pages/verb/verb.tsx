@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { type PathParams, ROUTES } from "@/shared/constants/routes";
+import { type PathParams, ROUTES } from "@/app/router/routes";
 
 function VerbPage() {
   const params = useParams<PathParams[typeof ROUTES.VERB]>();

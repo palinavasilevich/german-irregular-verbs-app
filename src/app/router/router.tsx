@@ -1,10 +1,15 @@
 import { createBrowserRouter } from "react-router-dom";
-import { App } from "./App";
-import { ROUTES } from "@/shared/constants/routes";
+import { App } from "../App";
+import { ROUTES } from "@/app/router/routes";
+import { Providers } from "../providers";
 
 export const router = createBrowserRouter([
   {
-    element: <App />,
+    element: (
+      <Providers>
+        <App />
+      </Providers>
+    ),
     children: [
       {
         path: ROUTES.HOME,

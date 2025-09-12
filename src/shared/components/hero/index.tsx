@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/shared/ui/kit/button";
-import { ROUTES } from "@/shared/constants/routes";
+import { ROUTES } from "@/app/router/routes";
 
 import heroImg from "@/assets/img/hero.svg";
 
