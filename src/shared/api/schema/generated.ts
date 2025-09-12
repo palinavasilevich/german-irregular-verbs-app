@@ -47,7 +47,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/verbs/{id}": {
+    "/verbs/{verbId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -60,7 +60,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    id: string;
+                    verbId: string;
                 };
                 cookie?: never;
             };
@@ -104,6 +104,8 @@ export interface components {
             translation: string;
             /** @example false */
             isFavorite: boolean;
+            /** @example ei – ie – ie */
+            group: string;
         };
         VerbsList: {
             list: components["schemas"]["Verb"][];

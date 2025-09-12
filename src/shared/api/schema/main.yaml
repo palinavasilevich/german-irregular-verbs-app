@@ -51,12 +51,12 @@ paths:
         "400":
           $ref: "#/components/responses/BadRequestError"
 
-  /verbs/{id}:
+  /verbs/{verbId}:
     get:
       summary: Get a verb by ID
       parameters:
         - in: path
-          name: id
+          name: verbId
           required: true
           schema:
             type: string
@@ -83,6 +83,7 @@ components:
         - participle
         - translation
         - isFavorite
+        - group
       properties:
         id:
           type: string
@@ -102,6 +103,9 @@ components:
         isFavorite:
           type: boolean
           example: false
+        group:
+          type: string
+          example: "ei – ie – ie"
 
     VerbsList:
       type: object
