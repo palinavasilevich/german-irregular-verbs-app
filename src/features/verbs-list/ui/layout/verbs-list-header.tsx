@@ -10,13 +10,13 @@ export function VerbsListLayoutHeader({
   actions,
 }: VerbsListLayoutHeaderProps) {
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex flex-col gap-2">
       <div>
-        <h1 className="text-2xl font-bold">{title}</h1>
+        <h1 className="text-2xl font-bold text-center">{title}</h1>
         {description && <p className="text-gray-500">{description}</p>}
       </div>
 
-      <div className="flex gap-2">{actions}</div>
+      {actions && <div className="flex gap-2">{actions}</div>}
     </div>
   );
 }
