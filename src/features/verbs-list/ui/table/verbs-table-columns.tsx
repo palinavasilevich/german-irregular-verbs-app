@@ -32,12 +32,16 @@ export const verbsTableColumns: ColumnDef<ApiSchemas["Verb"]>[] = [
   {
     accessorKey: "infinitive",
     header: ({ column }) => (
-      <VerbsTableColumnHeader column={column} title="Infinitive" />
+      <VerbsTableColumnHeader
+        column={column}
+        title="Infinitive"
+        className="md:text-base font-bold capitalize py-2"
+      />
     ),
 
     cell: ({ row }) => {
       const verb = row.original;
-      return <span>{verb.infinitive}</span>;
+      return <div className="py-2">{verb.infinitive}</div>;
     },
   },
   {
@@ -45,20 +49,29 @@ export const verbsTableColumns: ColumnDef<ApiSchemas["Verb"]>[] = [
     header: () => (
       <span className="md:text-base font-bold capitalize">Präteritum</span>
     ),
-    cell: (info) => info.getValue(),
+    cell: ({ row }) => {
+      const verb = row.original;
+      return <div className="py-2">{verb.infinitive}</div>;
+    },
   },
   {
     accessorKey: "participle",
     header: () => (
       <span className="md:text-base font-bold capitalize">Perfekt</span>
     ),
-    cell: (info) => info.getValue(),
+    cell: ({ row }) => {
+      const verb = row.original;
+      return <div className="py-2">{verb.infinitive}</div>;
+    },
   },
   {
     accessorKey: "translation",
     header: () => (
       <span className="md:text-base font-bold capitalize">Übersetzung</span>
     ),
-    cell: (info) => info.getValue(),
+    cell: ({ row }) => {
+      const verb = row.original;
+      return <div className="py-2">{verb.infinitive}</div>;
+    },
   },
 ];

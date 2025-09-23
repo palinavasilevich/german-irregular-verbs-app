@@ -1,13 +1,19 @@
 "use client";
 
+import * as React from "react";
 import {
-  type ColumnDef,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
 } from "@tanstack/react-table";
 
+import { VerbsTablePagination } from "./verbs-table-pagination";
 import {
   Table,
   TableBody,
@@ -26,23 +32,39 @@ export function VerbsTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+  const [rowSelection, setRowSelection] = React.useState({});
+
   const table = useReactTable({
     data,
     columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      rowSelection,
+    },
   });
 
   return (
-    <div>
-      <div className="overflow-hidden rounded-md border">
+    <div className="w-full h-[634px] flex flex-col gap-4">
+      <div className="overflow-hidden rounded-md border flex-2/3 flex flex-col">
         <Table>
           <TableHeader className="sticky top-0 z-10 bg-background shadow-md">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="py-4">
+                    <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -61,9 +83,10 @@ export function VerbsTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className=""
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="py-6">
+                    <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -85,10 +108,7 @@ export function VerbsTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="mt-4 text-muted-foreground flex-1 text-sm">
-        {table.getFilteredSelectedRowModel().rows.length} of{" "}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
-      </div>
+      <VerbsTablePagination table={table} />
     </div>
   );
 }

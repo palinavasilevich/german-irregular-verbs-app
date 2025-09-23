@@ -24,10 +24,7 @@ export function VerbsTableColumnHeader<TData, TValue>({
       <Button
         variant="ghost"
         className="text-sm md:text-base font-bold capitalize !p-0 m-0 hover:bg-transparent focus-visible:ring-offset-0 focus-visible:ring-0"
-        onPointerDown={(e) => {
-          e.preventDefault();
-          column.toggleSorting(sorted === "asc");
-        }}
+        onClick={() => column.toggleSorting(sorted === "asc")}
       >
         {title}
         {!sorted && <FaSort />}

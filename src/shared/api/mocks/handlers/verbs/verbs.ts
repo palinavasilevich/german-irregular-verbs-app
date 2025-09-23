@@ -20,7 +20,7 @@ export const verbsHandlers = [
   http.get("/verbs", async (ctx) => {
     const url = new URL(ctx.request.url);
     const page = Number(url.searchParams.get("page") || 1);
-    const limit = Number(url.searchParams.get("limit") || 10);
+    const limit = Number(url.searchParams.get("limit"));
 
     const search = url.searchParams.get("search");
     const isFavorite = url.searchParams.get("isFavorite");
@@ -53,7 +53,7 @@ export const verbsHandlers = [
     const paginatedVerbs = filteredVerbs.slice(startIndex, endIndex);
 
     return HttpResponse.json({
-      list: paginatedVerbs,
+      list: limit ? paginatedVerbs : filteredVerbs,
       total,
       totalPages,
     });
