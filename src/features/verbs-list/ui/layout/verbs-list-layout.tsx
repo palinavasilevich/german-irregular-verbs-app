@@ -1,15 +1,19 @@
 type VerbsListLayoutProps = {
-  header: React.ReactNode;
+  header?: React.ReactNode;
   children: React.ReactNode;
+  footer?: React.ReactNode;
 };
 
-export function VerbsListLayout({ header, children }: VerbsListLayoutProps) {
+export function VerbsListLayout({
+  header,
+  children,
+  footer,
+}: VerbsListLayoutProps) {
   return (
-    <section className="container mx-auto">
-      <div className="flex-1 flex flex-col gap-6">
-        {header}
-        {children}
-      </div>
-    </section>
+    <div className="w-full flex flex-col gap-4">
+      <div className="flex items-center">{header}</div>
+      {children}
+      {footer}
+    </div>
   );
 }

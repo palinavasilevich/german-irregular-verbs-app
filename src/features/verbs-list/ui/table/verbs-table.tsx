@@ -22,6 +22,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/ui/kit/table";
+import { Input } from "@/shared/ui/kit/input";
+import { VerbsListLayout } from "../layout/verbs-list-layout";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -56,59 +58,74 @@ export function VerbsTable<TData, TValue>({
   });
 
   return (
-    <div className="w-full h-[634px] flex flex-col gap-4">
-      <div className="overflow-hidden rounded-md border flex-2/3 flex flex-col">
-        <Table>
-          <TableHeader className="sticky top-0 z-10 bg-background shadow-md">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  className=""
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+    <VerbsListLayout
+      header={
+        <Input
+          placeholder="Filter infinitive..."
+          value={
+            (table.getColumn("infinitive")?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table.getColumn("infinitive")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      }
+      footer={<VerbsTablePagination table={table} />}
+    >
+      <div className="w-full flex flex-col h-[60dvh]">
+        <div className="overflow-hidden rounded-md border flex flex-col">
+          <Table>
+            <TableHeader className="sticky top-0 z-10 bg-background shadow-md">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    className=""
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
-      <VerbsTablePagination table={table} />
-    </div>
+    </VerbsListLayout>
   );
 }
