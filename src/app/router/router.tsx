@@ -27,6 +27,11 @@ export const router = createBrowserRouter([
       },
 
       {
+        path: ROUTES.STUDY_VERBS,
+        lazy: () => import("@/pages/study-verbs/study-verbs"),
+      },
+
+      {
         path: ROUTES.RANDOM_VERBS,
         lazy: () => import("@/pages/random-verbs/random-verbs"),
       },

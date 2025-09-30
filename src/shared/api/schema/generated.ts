@@ -15,9 +15,7 @@ export interface paths {
         get: {
             parameters: {
                 query?: {
-                    page?: number;
-                    limit?: number;
-                    sort?: "infinitive";
+                    ids?: string;
                     isFavorite?: boolean;
                     search?: string;
                 };
@@ -33,7 +31,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["VerbsList"];
+                        "application/json": components["schemas"]["Verb"][];
                     };
                 };
                 400: components["responses"]["BadRequestError"];
@@ -106,13 +104,6 @@ export interface components {
             isFavorite: boolean;
             /** @example ei – ie – ie */
             group: string;
-        };
-        VerbsList: {
-            list: components["schemas"]["Verb"][];
-            /** @example 42 */
-            total: number;
-            /** @example 5 */
-            totalPages: number;
         };
         Error: {
             message: string;

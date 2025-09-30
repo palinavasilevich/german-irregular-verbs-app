@@ -19,7 +19,7 @@ export const links = [
 
 export function AppHeader() {
   return (
-    <header className="bg-background border-b border-border/40 shadow-sm py-5 px-4 mb-6">
+    <header className="bg-background border-b border-border/40 shadow-sm py-5 mb-6">
       <div className="container mx-auto flex items-center justify-between">
         <Link to={ROUTES.HOME} className="uppercase">
           {/* <img src={logoImg} alt="logo" className="w-[70px]" /> */}

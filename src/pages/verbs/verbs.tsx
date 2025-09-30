@@ -1,14 +1,13 @@
-import { useVerbsList } from "@/features/verbs-list/api/use-verbs-list";
-import { verbsTableColumns } from "@/features/verbs-list/ui/table/verbs-table-columns";
-import { VerbsTable } from "@/features/verbs-list/ui/table/verbs-table";
+import { VerbsTable } from "@/features/verbs-list/ui/verbs-table";
 import { PageContent } from "@/shared/components/layout/page-content";
+import { useGetAllVerbsQuery } from "@/entities/verb/api/useVerbsQuery";
 
 function VerbsPage() {
-  const verbsQuery = useVerbsList({});
+  const { verbs } = useGetAllVerbsQuery();
 
   return (
     <PageContent title="Irregular German Verbs">
-      <VerbsTable columns={verbsTableColumns} data={verbsQuery.verbs} />
+      <VerbsTable data={verbs} />
     </PageContent>
   );
 }

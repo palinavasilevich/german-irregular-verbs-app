@@ -12,25 +12,11 @@ paths:
     get:
       summary: Get all verbs
       parameters:
-        - name: page
-          in: query
-          required: false
-          schema:
-            type: integer
-            default: 1
-        - name: limit
-          in: query
-          required: false
-          schema:
-            type: integer
-            default: 10
-        - name: sort
+        - name: ids
           in: query
           required: false
           schema:
             type: string
-            enum:
-              - infinitive
         - name: isFavorite
           in: query
           required: false
@@ -47,7 +33,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/VerbsList"
+                type: array
+                items:
+                  $ref: "#/components/schemas/Verb"
         "400":
           $ref: "#/components/responses/BadRequestError"
 
@@ -106,24 +94,6 @@ components:
         group:
           type: string
           example: "ei – ie – ie"
-
-    VerbsList:
-      type: object
-      required:
-        - list
-        - total
-        - totalPages
-      properties:
-        list:
-          type: array
-          items:
-            $ref: "#/components/schemas/Verb"
-        total:
-          type: integer
-          example: 42
-        totalPages:
-          type: integer
-          example: 5
 
     Error:
       type: object
