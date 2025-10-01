@@ -8,7 +8,7 @@ import verbsList from "./verbsList";
 function generateVerbs(): ApiSchemas["Verb"][] {
   return verbsList.map((verb) => ({
     ...verb,
-    id: crypto.randomUUID(),
+    // id: crypto.randomUUID(),
     isFavorite: false,
   }));
 }

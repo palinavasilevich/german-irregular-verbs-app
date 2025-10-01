@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import {
   flexRender,
@@ -13,7 +11,7 @@ import {
   type SortingState,
 } from "@tanstack/react-table";
 
-import { VerbsTablePagination } from "./verbs-table-pagination";
+import { VerbsTablePagination } from "@/entities/verb/ui/verbs-table/verbs-table-pagination";
 import {
   Table,
   TableBody,
@@ -23,22 +21,34 @@ import {
   TableRow,
 } from "@/shared/ui/kit/table";
 import { Input } from "@/shared/ui/kit/input";
-import { VerbsListLayout } from "../layout/verbs-list-layout";
+import { VerbsTableLayout } from "@/entities/verb/ui/verbs-table/verbs-table-layout";
+import { StudyVerbsButton } from "./study-verbs-button";
+import { useVerbStore } from "@/entities/verb/model/store";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function VerbsTable<TData, TValue>({
+export function AllVerbsTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const { selectedVerbsIds, clearSelectedVerbsIds } = useVerbStore();
+
+  React.useEffect(() => {
+    clearSelectedVerbsIds();
+  }, [clearSelectedVerbsIds]);
+
+  const rowSelection = React.useMemo(
+    () => Object.fromEntries(selectedVerbsIds.map((id) => [id, true])),
+    [selectedVerbsIds]
+  );
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
     data,
@@ -49,27 +59,30 @@ export function VerbsTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
       rowSelection,
     },
+    enableRowSelection: true,
   });
 
   return (
-    <VerbsListLayout
+    <VerbsTableLayout
       header={
-        <Input
-          placeholder="Filter infinitive..."
-          value={
-            (table.getColumn("infinitive")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table.getColumn("infinitive")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        <>
+          <Input
+            placeholder="Filter infinitive..."
+            value={
+              (table.getColumn("infinitive")?.getFilterValue() as string) ?? ""
+            }
+            onChange={(e) =>
+              table.getColumn("infinitive")?.setFilterValue(e.target.value)
+            }
+            className="max-w-sm"
+          />
+          {selectedVerbsIds.length > 0 && <StudyVerbsButton />}
+        </>
       }
       footer={<VerbsTablePagination table={table} />}
     >
@@ -79,28 +92,25 @@ export function VerbsTable<TData, TValue>({
             <TableHeader className="sticky top-0 z-10 bg-background shadow-md">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
+                  {headerGroup.headers.map((header) => (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  ))}
                 </TableRow>
               ))}
             </TableHeader>
             <TableBody>
-              {table.getRowModel().rows?.length ? (
+              {table.getRowModel().rows.length ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                    className=""
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
@@ -126,6 +136,6 @@ export function VerbsTable<TData, TValue>({
           </Table>
         </div>
       </div>
-    </VerbsListLayout>
+    </VerbsTableLayout>
   );
 }

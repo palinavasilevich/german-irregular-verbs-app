@@ -4,7 +4,7 @@ export const ROUTES = {
   HOME: "/",
   VERBS: "/verbs",
   VERB: "/verbs/:verbId",
-  STUDY_VERBS: "/study",
+  STUDY_VERBS: "/study-verbs",
   RANDOM_VERBS: "/random-verbs",
   FAVORITE_VERBS: "/favorite-verbs",
 } as const;

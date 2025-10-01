@@ -4,16 +4,16 @@ import { FaSortAlphaDown, FaSortAlphaUp, FaSort } from "react-icons/fa";
 
 import type { Column } from "@tanstack/react-table";
 
-interface VerbsTableColumnHeaderProps<TData, TValue>
+interface VerbsTableColumnHeaderSortProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>;
   title: string;
 }
-export function VerbsTableColumnHeader<TData, TValue>({
+export function VerbsTableColumnHeaderSort<TData, TValue>({
   column,
   title,
   className,
-}: VerbsTableColumnHeaderProps<TData, TValue>) {
+}: VerbsTableColumnHeaderSortProps<TData, TValue>) {
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
   }
