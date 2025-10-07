@@ -15,18 +15,18 @@ export function StudyVerbsButton() {
     navigate(`/study-verbs?${params.toString()}`);
   };
 
-  const countSelectedVerbsIds = selectedVerbsIds.length;
+  const numberOfSelectedVerbs = selectedVerbsIds.length;
 
   return (
     <Button
       variant="outline"
       onClick={handleClick}
-      disabled={countSelectedVerbsIds === 0}
+      disabled={numberOfSelectedVerbs === 0}
       className="cursor-pointer"
     >
       <RocketIcon className="mr-2 size-4" aria-hidden="true" />
-      {`Study (${countSelectedVerbsIds}) ${
-        countSelectedVerbsIds === 1 ? "verb" : "verbs"
+      {`Study (${numberOfSelectedVerbs}) ${
+        numberOfSelectedVerbs === 1 ? "verb" : "verbs"
       }`}
     </Button>
   );

@@ -11,7 +11,6 @@ import {
   type SortingState,
 } from "@tanstack/react-table";
 
-import { VerbsTablePagination } from "./verbs-table-pagination";
 import {
   Table,
   TableBody,
@@ -20,15 +19,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/ui/kit/table";
-import { Input } from "@/shared/ui/kit/input";
-import { VerbsTableLayout } from "./verbs-table-layout";
+import { VerbsTableLayout } from "@/entities/verb/ui/verbs-table/verbs-table-layout";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function VerbsTable<TData, TValue>({
+export function StudyVerbsTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -56,21 +54,7 @@ export function VerbsTable<TData, TValue>({
   });
 
   return (
-    <VerbsTableLayout
-      header={
-        <Input
-          placeholder="Filter infinitive..."
-          value={
-            (table.getColumn("infinitive")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table.getColumn("infinitive")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-      }
-      footer={<VerbsTablePagination table={table} />}
-    >
+    <VerbsTableLayout>
       <div className="w-full flex flex-col h-[60dvh]">
         <div className="overflow-hidden rounded-md border flex flex-col">
           <Table>
