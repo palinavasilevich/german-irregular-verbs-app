@@ -1,14 +1,8 @@
-import * as React from "react";
 import {
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
   useReactTable,
   type ColumnDef,
-  type ColumnFiltersState,
-  type SortingState,
 } from "@tanstack/react-table";
 
 import {
@@ -21,37 +15,38 @@ import {
 } from "@/shared/ui/kit/table";
 import { VerbsTableLayout } from "@/entities/verb/ui/verbs-table/verbs-table-layout";
 
-interface DataTableProps<TData, TValue> {
+import { useEffect } from "react";
+import { useFocusNextInput } from "../../model/use-focus-next-input";
+
+interface StudyVerbsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  focusApi?: ReturnType<typeof useFocusNextInput>;
 }
 
 export function StudyVerbsTable<TData, TValue>({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [rowSelection, setRowSelection] = React.useState({});
+  focusApi: externalFocusApi,
+}: StudyVerbsTableProps<TData, TValue>) {
+  const internalFocusApi = useFocusNextInput();
+  const focusApi = externalFocusApi ?? internalFocusApi;
+  const { focusFirstInput } = focusApi;
 
   const table = useReactTable({
     data,
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      rowSelection,
-    },
   });
+
+  useEffect(() => {
+    if (data.length > 0) {
+      const t = setTimeout(() => {
+        focusFirstInput();
+      }, 150);
+      return () => clearTimeout(t);
+    }
+  }, [data.length, focusFirstInput]);
 
   return (
     <VerbsTableLayout>
@@ -61,29 +56,23 @@ export function StudyVerbsTable<TData, TValue>({
             <TableHeader className="sticky top-0 z-10 bg-background shadow-md">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
+                  {headerGroup.headers.map((header) => (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  ))}
                 </TableRow>
               ))}
             </TableHeader>
             <TableBody>
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                    className=""
-                  >
+                  <TableRow key={row.id}>
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
                         {flexRender(
@@ -97,7 +86,7 @@ export function StudyVerbsTable<TData, TValue>({
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={columns.length}
+                    colSpan={table.getAllColumns().length}
                     className="h-24 text-center"
                   >
                     No results.

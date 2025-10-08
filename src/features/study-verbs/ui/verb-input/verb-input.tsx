@@ -8,11 +8,12 @@ import {
 } from "react";
 
 import { Input } from "@/shared/ui/kit/input";
-
-const MAX_ATTEMPTS = 3;
+import { MAX_ATTEMPTS } from "@/entities/verb/model/constants";
 
 export type VerbInputRef = {
   focus: () => void;
+  isAnsweredCorrectly: boolean;
+  attemptsLeft: number;
 };
 
 type VerbInputProps = {
@@ -28,9 +29,10 @@ export const VerbInput = forwardRef<VerbInputRef, VerbInputProps>(
     const [attemptsLeft, setAttemptsLeft] = useState(MAX_ATTEMPTS);
 
     const inputRef = useRef<HTMLInputElement>(null);
-
     useImperativeHandle(ref, () => ({
       focus: () => inputRef.current?.focus(),
+      isAnsweredCorrectly,
+      attemptsLeft,
     }));
 
     const normalize = (text: string) => text.trim().toLowerCase();

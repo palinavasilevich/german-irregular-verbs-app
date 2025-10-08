@@ -1,37 +1,43 @@
 import { type ColumnDef, type CellContext } from "@tanstack/react-table";
 import type { ApiSchemas } from "@/shared/api/schema";
 import { Checkbox } from "@/shared/ui/kit/checkbox";
-import { VerbsTableColumnHeaderSort } from "./verbs-table-column-header-sort";
-import { useVerbStore } from "../../model/store";
 import {
   VerbInput,
   type VerbInputRef,
 } from "@/features/study-verbs/ui/verb-input/verb-input";
-import { useRef } from "react";
+import { useVerbStore } from "./store";
+import { HEADERS } from "./constants";
+import { VerbsTableColumnHeaderSort } from "../ui/verbs-table/verbs-table-column-header-sort";
+
+type FocusApi = {
+  registerInput: (
+    rowId: string,
+    colIndex: number,
+    ref: VerbInputRef | null
+  ) => void;
+  focusNext: (rowId: string, colIndex: number) => void;
+};
 
 type UseVerbsTableColumnsProps = {
   withSelection?: boolean;
   withSorting?: boolean;
   withStudyMode?: boolean;
+  focusApi?: FocusApi;
 };
-
-export const HEADERS = [
-  { accessorKey: "infinitive", title: "infinitiv" },
-  { accessorKey: "past", title: "präteritum" },
-  { accessorKey: "participle", title: "perfekt" },
-];
 
 export function useVerbsTableColumns({
   withSelection = false,
   withSorting = false,
   withStudyMode = false,
+  focusApi,
 }: UseVerbsTableColumnsProps): ColumnDef<ApiSchemas["Verb"]>[] {
   const { selectedVerbsIds, toggleVerbsId, setSelectedVerbsIds } =
     useVerbStore();
 
-  const rowRefs = useRef<Map<string, VerbInputRef[]>>(new Map());
-
   if (withStudyMode) {
+    const registerInput = focusApi?.registerInput;
+    const focusNext = focusApi?.focusNext;
+
     return [
       ...HEADERS.map(({ accessorKey, title }, colIndex) => ({
         accessorKey,
@@ -44,31 +50,11 @@ export function useVerbsTableColumns({
           const value = row.getValue(accessorKey);
           const rowId = row.original.id;
 
-          if (!rowRefs.current.has(rowId)) {
-            rowRefs.current.set(rowId, []);
-          }
-
-          const refsArray = rowRefs.current.get(rowId)!;
-
           return (
             <VerbInput
-              ref={(el) => {
-                refsArray[colIndex] = el!;
-              }}
+              ref={(el) => registerInput?.(rowId, colIndex, el)}
               correctAnswer={String(value)}
-              onRequestFocusNext={() => {
-                const nextRef = refsArray[colIndex + 1];
-                if (nextRef) {
-                  nextRef.focus();
-                } else {
-                  const rows = Array.from(rowRefs.current.keys());
-                  const currentIndex = rows.indexOf(rowId);
-                  const nextRowId = rows[currentIndex + 1];
-                  if (nextRowId) {
-                    rowRefs.current.get(nextRowId)?.[0]?.focus();
-                  }
-                }
-              }}
+              onRequestFocusNext={() => focusNext?.(rowId, colIndex)}
             />
           );
         },
@@ -126,24 +112,20 @@ export function useVerbsTableColumns({
     });
   }
 
+  // Default view (no study mode)
   columns.push(
     {
       accessorKey: "infinitive",
-      header: ({ column }) => {
-        if (withSorting) {
-          return (
-            <VerbsTableColumnHeaderSort
-              column={column}
-              title="Infinitive"
-              className="md:text-base font-bold capitalize py-2"
-            />
-          );
-        }
-
-        return (
+      header: ({ column }) =>
+        withSorting ? (
+          <VerbsTableColumnHeaderSort
+            column={column}
+            title="Infinitive"
+            className="md:text-base font-bold capitalize py-2"
+          />
+        ) : (
           <span className="md:text-base font-bold capitalize">Infinitive</span>
-        );
-      },
+        ),
       cell: ({ row }) => <div className="py-2">{row.original.infinitive}</div>,
     },
     {
