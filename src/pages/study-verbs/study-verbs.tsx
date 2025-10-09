@@ -8,7 +8,7 @@ import { StudyVerbsTable } from "@/features/study-verbs/ui/table/study-verbs-tab
 import { Loader } from "@/shared/ui/loader/loader";
 import { shuffle } from "@/shared/lib/array";
 import type { ApiSchemas } from "@/shared/api/schema";
-import { useFocusInputControl } from "@/features/study-verbs/model/use-focus-input-control";
+
 import { useTableColumns } from "@/features/study-verbs/model/use-table-columns";
 
 export function StudyVerbsPage() {
@@ -21,9 +21,7 @@ export function StudyVerbsPage() {
 
   const { data: verbs, isPending } = useGetVerbsByIdsQuery(verbsIds);
 
-  const focusApi = useFocusInputControl();
-
-  const columns = useTableColumns({ focusApi });
+  const { columns, focusFirstInput } = useTableColumns();
 
   const [shuffledVerbs, setShuffledVerbs] = useState<ApiSchemas["Verb"][]>([]);
 
@@ -35,18 +33,19 @@ export function StudyVerbsPage() {
     }
   }, [verbs]);
 
+  useEffect(() => {
+    if (shuffledVerbs.length > 0) {
+      const t = setTimeout(() => focusFirstInput(), 50);
+      return () => clearTimeout(t);
+    }
+  }, [shuffledVerbs, focusFirstInput]);
+
   const content = useMemo(() => {
     if (isPending) return <Loader />;
     if (!verbs?.length) return null;
 
-    return (
-      <StudyVerbsTable
-        data={shuffledVerbs}
-        columns={columns}
-        focusApi={focusApi}
-      />
-    );
-  }, [isPending, verbs, shuffledVerbs, columns, focusApi]);
+    return <StudyVerbsTable data={shuffledVerbs} columns={columns} />;
+  }, [isPending, verbs, shuffledVerbs, columns]);
 
   return <PageContent title="Study Verbs">{content}</PageContent>;
 }

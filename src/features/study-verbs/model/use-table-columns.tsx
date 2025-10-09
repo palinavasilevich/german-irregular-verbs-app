@@ -3,30 +3,21 @@ import type { ApiSchemas } from "@/shared/api/schema";
 
 import {
   VerbInput,
-  type VerbInputRef,
+  // type VerbInputRef,
 } from "@/features/study-verbs/ui/verb-input/verb-input";
 import { HEADERS } from "./constants";
+import { useFocusInputControl } from "./use-focus-input-control";
 
-type FocusApi = {
-  registerInput: (
-    rowId: string,
-    colIndex: number,
-    ref: VerbInputRef | null
-  ) => void;
-  focusNext: (rowId: string, colIndex: number) => void;
-};
+export function useTableColumns() {
+  const {
+    registerInput,
+    focusNext,
+    focusFirstInput,
+    focusFirstUnfilled,
+    areAllFilled,
+  } = useFocusInputControl();
 
-type UseTableColumnsProps = {
-  focusApi?: FocusApi;
-};
-
-export function useTableColumns({
-  focusApi,
-}: UseTableColumnsProps): ColumnDef<ApiSchemas["Verb"]>[] {
-  const registerInput = focusApi?.registerInput;
-  const focusNext = focusApi?.focusNext;
-
-  return [
+  const columns: ColumnDef<ApiSchemas["Verb"]>[] = [
     ...HEADERS.map(({ accessorKey, title }, colIndex) => ({
       accessorKey,
       header: () => (
@@ -53,4 +44,6 @@ export function useTableColumns({
       cell: ({ row }) => <div className="py-2">{row.original.translation}</div>,
     },
   ];
+
+  return { columns, focusFirstInput, focusFirstUnfilled, areAllFilled };
 }

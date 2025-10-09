@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import { type VerbInputRef } from "../ui/verb-input/verb-input";
 
 export function useFocusInputControl() {
@@ -14,6 +14,8 @@ export function useFocusInputControl() {
       inputsRef.current[rowId] = [];
     }
     inputsRef.current[rowId][colIndex] = ref;
+
+    console.log(Object.values(inputsRef.current));
   };
 
   const focusFirstInput = () => {
@@ -65,5 +67,23 @@ export function useFocusInputControl() {
     focusFirstUnfilled();
   };
 
-  return { registerInput, focusNext, focusFirstInput, focusFirstUnfilled };
+  const areAllFilled = useCallback(() => {
+    for (const row of Object.values(inputsRef.current)) {
+      console.log(row);
+    }
+  }, []);
+
+  //   const areAllFilled = useCallback(() => {
+  //   return inputsRef.current.every(
+  //     (input) => input.ref && input.ref.value.trim() !== ""
+  //   );
+  // }, []);
+
+  return {
+    registerInput,
+    focusNext,
+    focusFirstInput,
+    focusFirstUnfilled,
+    areAllFilled,
+  };
 }

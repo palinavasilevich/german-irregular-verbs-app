@@ -5,6 +5,7 @@ import {
   forwardRef,
   useImperativeHandle,
   useRef,
+  useEffect,
 } from "react";
 
 import { Input } from "@/shared/ui/kit/input";
@@ -79,6 +80,17 @@ export const VerbInput = forwardRef<VerbInputRef, VerbInputProps>(
       : "";
 
     const isDisabled = isAnsweredCorrectly || attemptsLeft <= 0;
+
+    useEffect(() => {
+      if (isAnsweredCorrectly) {
+        inputRef.current?.classList.add("animate-pulse");
+        const timer = setTimeout(
+          () => inputRef.current?.classList.remove("animate-pulse"),
+          300
+        );
+        return () => clearTimeout(timer);
+      }
+    }, [isAnsweredCorrectly]);
 
     return (
       <Input
