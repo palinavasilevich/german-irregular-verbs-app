@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { type VerbInputRef } from "../ui/verb-input/verb-input";
 
-export function useFocusNextInput() {
+export function useFocusInputControl() {
   const inputsRef = useRef<Record<string, VerbInputRef[]>>({});
 
   const registerInput = (
@@ -43,7 +43,6 @@ export function useFocusNextInput() {
     const currentRowInputs = inputsRef.current[rowId];
     const nextColIndex = colIndex + 1;
 
-    // 👉 В той же строке
     for (let i = nextColIndex; i < currentRowInputs.length; i++) {
       const input = currentRowInputs[i];
       if (input && !input.isAnsweredCorrectly && input.attemptsLeft > 0) {
@@ -52,7 +51,6 @@ export function useFocusNextInput() {
       }
     }
 
-    // 👉 В следующих строках
     for (let r = rowIndex + 1; r < rows.length; r++) {
       const nextRow = inputsRef.current[rows[r]];
       const firstUnfilled = nextRow.find(
@@ -64,8 +62,7 @@ export function useFocusNextInput() {
       }
     }
 
-    // 👉 Если дошли до конца — фокус на самый первый инпут
-    focusFirstInput();
+    focusFirstUnfilled();
   };
 
   return { registerInput, focusNext, focusFirstInput, focusFirstUnfilled };

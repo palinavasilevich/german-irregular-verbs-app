@@ -16,12 +16,12 @@ import {
 import { VerbsTableLayout } from "@/entities/verb/ui/verbs-table/verbs-table-layout";
 
 import { useEffect } from "react";
-import { useFocusNextInput } from "../../model/use-focus-next-input";
+import { useFocusInputControl } from "../../model/use-focus-input-control";
 
 interface StudyVerbsTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  focusApi?: ReturnType<typeof useFocusNextInput>;
+  focusApi?: ReturnType<typeof useFocusInputControl>;
 }
 
 export function StudyVerbsTable<TData, TValue>({
@@ -29,7 +29,7 @@ export function StudyVerbsTable<TData, TValue>({
   data,
   focusApi: externalFocusApi,
 }: StudyVerbsTableProps<TData, TValue>) {
-  const internalFocusApi = useFocusNextInput();
+  const internalFocusApi = useFocusInputControl();
   const focusApi = externalFocusApi ?? internalFocusApi;
   const { focusFirstInput } = focusApi;
 

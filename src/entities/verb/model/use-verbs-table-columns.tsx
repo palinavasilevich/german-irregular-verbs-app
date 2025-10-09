@@ -1,75 +1,21 @@
-import { type ColumnDef, type CellContext } from "@tanstack/react-table";
+import { type ColumnDef } from "@tanstack/react-table";
 import type { ApiSchemas } from "@/shared/api/schema";
 import { Checkbox } from "@/shared/ui/kit/checkbox";
-import {
-  VerbInput,
-  type VerbInputRef,
-} from "@/features/study-verbs/ui/verb-input/verb-input";
 import { useVerbStore } from "./store";
-import { HEADERS } from "./constants";
-import { VerbsTableColumnHeaderSort } from "../ui/verbs-table/verbs-table-column-header-sort";
 
-type FocusApi = {
-  registerInput: (
-    rowId: string,
-    colIndex: number,
-    ref: VerbInputRef | null
-  ) => void;
-  focusNext: (rowId: string, colIndex: number) => void;
-};
+import { VerbsTableColumnHeaderSort } from "../ui/verbs-table/verbs-table-column-header-sort";
 
 type UseVerbsTableColumnsProps = {
   withSelection?: boolean;
   withSorting?: boolean;
-  withStudyMode?: boolean;
-  focusApi?: FocusApi;
 };
 
 export function useVerbsTableColumns({
   withSelection = false,
   withSorting = false,
-  withStudyMode = false,
-  focusApi,
 }: UseVerbsTableColumnsProps): ColumnDef<ApiSchemas["Verb"]>[] {
   const { selectedVerbsIds, toggleVerbsId, setSelectedVerbsIds } =
     useVerbStore();
-
-  if (withStudyMode) {
-    const registerInput = focusApi?.registerInput;
-    const focusNext = focusApi?.focusNext;
-
-    return [
-      ...HEADERS.map(({ accessorKey, title }, colIndex) => ({
-        accessorKey,
-        header: () => (
-          <div className="text-sm md:text-base font-bold capitalize">
-            {title}
-          </div>
-        ),
-        cell: ({ row }: CellContext<ApiSchemas["Verb"], unknown>) => {
-          const value = row.getValue(accessorKey);
-          const rowId = row.original.id;
-
-          return (
-            <VerbInput
-              ref={(el) => registerInput?.(rowId, colIndex, el)}
-              correctAnswer={String(value)}
-              onRequestFocusNext={() => focusNext?.(rowId, colIndex)}
-            />
-          );
-        },
-      })),
-      {
-        accessorKey: "translation",
-        header: () => (
-          <span className="md:text-base font-bold capitalize">Übersetzung</span>
-        ),
-        cell: ({ row }) => (
-          <div className="py-2">{row.original.translation}</div>
-        ),
-      },
-    ];
-  }
 
   const columns: ColumnDef<ApiSchemas["Verb"]>[] = [];
 

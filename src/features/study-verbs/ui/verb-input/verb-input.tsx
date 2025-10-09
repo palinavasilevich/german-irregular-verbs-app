@@ -8,7 +8,7 @@ import {
 } from "react";
 
 import { Input } from "@/shared/ui/kit/input";
-import { MAX_ATTEMPTS } from "@/entities/verb/model/constants";
+import { MAX_ATTEMPTS } from "../../model/constants";
 
 export type VerbInputRef = {
   focus: () => void;
