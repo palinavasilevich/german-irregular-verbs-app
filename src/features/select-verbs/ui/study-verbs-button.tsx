@@ -2,6 +2,7 @@ import { useNavigate, createSearchParams } from "react-router-dom";
 import { useVerbStore } from "@/entities/verb/model/store";
 import { Button } from "@/shared/ui/kit/button";
 import { RocketIcon } from "lucide-react";
+import { ROUTES } from "@/app/router/routes";
 
 export function StudyVerbsButton() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export function StudyVerbsButton() {
 
     const params = createSearchParams({ ids: selectedVerbsIds.join(",") });
     clearSelectedVerbsIds();
-    navigate(`/study-verbs?${params.toString()}`);
+    navigate(`${ROUTES.STUDY_VERBS}?${params.toString()}`);
   };
 
   const numberOfSelectedVerbs = selectedVerbsIds.length;

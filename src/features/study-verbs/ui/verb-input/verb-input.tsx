@@ -39,8 +39,6 @@ export const VerbInput = forwardRef<VerbInputRef, VerbInputProps>(
     const normalize = (text: string) => text.trim().toLowerCase();
 
     const finishInput = (success: boolean, updatedAttempts: number) => {
-      onAnswer?.({ isCorrect: success, attemptsLeft: updatedAttempts });
-
       if (success || updatedAttempts <= 0) {
         onRequestFocusNext?.();
       }
@@ -75,7 +73,7 @@ export const VerbInput = forwardRef<VerbInputRef, VerbInputProps>(
 
     const borderClass = isAnsweredCorrectly
       ? "border-green-500"
-      : attemptsLeft < MAX_ATTEMPTS
+      : attemptsLeft === 0
       ? "border-rose-500"
       : "";
 
@@ -91,6 +89,15 @@ export const VerbInput = forwardRef<VerbInputRef, VerbInputProps>(
         return () => clearTimeout(timer);
       }
     }, [isAnsweredCorrectly]);
+
+    useEffect(() => {
+      if (isAnsweredCorrectly || attemptsLeft <= 0) {
+        onAnswer?.({
+          isCorrect: isAnsweredCorrectly,
+          attemptsLeft,
+        });
+      }
+    }, [isAnsweredCorrectly, attemptsLeft, onAnswer]);
 
     return (
       <Input

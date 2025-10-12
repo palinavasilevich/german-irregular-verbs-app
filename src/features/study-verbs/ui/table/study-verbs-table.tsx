@@ -13,9 +13,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/ui/kit/table";
-import { VerbsTableLayout } from "@/entities/verb/ui/verbs-table/verbs-table-layout";
 
-import { useEffect } from "react";
+import { VerbsTableLayout } from "@/entities/verb/ui/verbs-table/verbs-table-layout";
 import { useFocusInputControl } from "../../model/use-focus-input-control";
 
 interface StudyVerbsTableProps<TData, TValue> {
@@ -27,26 +26,13 @@ interface StudyVerbsTableProps<TData, TValue> {
 export function StudyVerbsTable<TData, TValue>({
   columns,
   data,
-  focusApi: externalFocusApi,
+  focusApi,
 }: StudyVerbsTableProps<TData, TValue>) {
-  const internalFocusApi = useFocusInputControl();
-  const focusApi = externalFocusApi ?? internalFocusApi;
-  const { focusFirstInput } = focusApi;
-
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-
-  useEffect(() => {
-    if (data.length > 0) {
-      const t = setTimeout(() => {
-        focusFirstInput();
-      }, 150);
-      return () => clearTimeout(t);
-    }
-  }, [data.length, focusFirstInput]);
 
   return (
     <VerbsTableLayout>
@@ -69,16 +55,17 @@ export function StudyVerbsTable<TData, TValue>({
                 </TableRow>
               ))}
             </TableHeader>
+
             <TableBody>
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow key={row.id}>
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
+                        {flexRender(cell.column.columnDef.cell, {
+                          ...cell.getContext(),
+                          focusApi,
+                        })}
                       </TableCell>
                     ))}
                   </TableRow>
