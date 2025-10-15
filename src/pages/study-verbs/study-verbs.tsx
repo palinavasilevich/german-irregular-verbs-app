@@ -9,9 +9,11 @@ import type { ApiSchemas } from "@/shared/api/schema";
 import { useTableColumns } from "@/features/study-verbs/model/use-table-columns";
 import { useFocusInputControl } from "@/features/study-verbs/model/use-focus-input-control";
 import { FeedbackDialog } from "@/features/study-verbs/ui/feedback-dialog";
+import { useDialogContext } from "@/app/context/dialog-context";
 
 export function StudyVerbsPage() {
   const location = useLocation();
+
   const verbsIds = useMemo(() => {
     const idsParam = new URLSearchParams(location.search).get("ids") || "";
     return idsParam.split(",").filter(Boolean);
@@ -22,14 +24,26 @@ export function StudyVerbsPage() {
 
   const focusApi = useFocusInputControl();
   const { columns } = useTableColumns(focusApi);
-  const { focusFirstUnfilled } = focusApi;
+  const { focusFirstUnfilled, areAllFilled, getResults, resetInputs } =
+    focusApi;
+
+  const { openDialog } = useDialogContext();
 
   useEffect(() => {
-    if (verbs?.length) {
-      setShuffledVerbs(shuffle(verbs));
-    } else {
-      setShuffledVerbs([]);
-    }
+    const interval = setInterval(() => {
+      if (areAllFilled()) {
+        const results = getResults();
+        openDialog("feedback", results);
+        clearInterval(interval);
+      }
+    }, 200);
+
+    return () => clearInterval(interval);
+  }, [areAllFilled, getResults, openDialog]);
+
+  useEffect(() => {
+    if (verbs?.length) setShuffledVerbs(shuffle(verbs));
+    else setShuffledVerbs([]);
   }, [verbs]);
 
   useEffect(() => {
@@ -55,7 +69,10 @@ export function StudyVerbsPage() {
   return (
     <PageContent title="Study Verbs">
       {content}
-      <FeedbackDialog />
+      <FeedbackDialog
+        resetInputs={resetInputs}
+        focusFirstUnfilled={focusFirstUnfilled}
+      />
     </PageContent>
   );
 }

@@ -61,7 +61,6 @@ export function useFocusInputControl() {
   const getResults = useCallback(() => {
     let correct = 0;
     let incorrect = 0;
-
     for (const row of Object.values(inputsRef.current)) {
       for (const input of row) {
         if (!input) continue;
@@ -81,11 +80,20 @@ export function useFocusInputControl() {
     );
   }, []);
 
+  const resetInputs = useCallback(() => {
+    for (const row of Object.values(inputsRef.current)) {
+      for (const input of row) {
+        input?.reset?.();
+      }
+    }
+  }, []);
+
   return {
     registerInput,
     focusNext,
     focusFirstUnfilled,
     areAllFilled,
     getResults,
+    resetInputs,
   };
 }

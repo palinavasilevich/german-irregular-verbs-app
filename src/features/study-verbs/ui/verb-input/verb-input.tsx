@@ -12,46 +12,48 @@ import { Input } from "@/shared/ui/kit/input";
 import { MAX_ATTEMPTS } from "../../model/constants";
 
 export type VerbInputRef = {
-  focus: () => void;
   isAnsweredCorrectly: boolean;
   attemptsLeft: number;
+  focus: () => void;
+  reset: () => void;
 };
 
 type VerbInputProps = {
   correctAnswer: string;
-  onAnswer?: () => void;
   onRequestFocusNext?: () => void;
 };
 
 export const VerbInput = forwardRef<VerbInputRef, VerbInputProps>(
-  ({ correctAnswer, onAnswer, onRequestFocusNext }, ref) => {
+  ({ correctAnswer, onRequestFocusNext }, ref) => {
     const [value, setValue] = useState("");
     const [isAnsweredCorrectly, setIsAnsweredCorrectly] = useState(false);
     const [attemptsLeft, setAttemptsLeft] = useState(MAX_ATTEMPTS);
 
     const inputRef = useRef<HTMLInputElement>(null);
+
     useImperativeHandle(ref, () => ({
       focus: () => inputRef.current?.focus(),
       isAnsweredCorrectly,
       attemptsLeft,
+      reset: () => {
+        setValue("");
+        setIsAnsweredCorrectly(false);
+        setAttemptsLeft(MAX_ATTEMPTS);
+      },
     }));
 
     const normalize = (text: string) => text.trim().toLowerCase();
 
-    const finishInput = (success: boolean, updatedAttempts: number) => {
-      if (success || updatedAttempts <= 0) {
-        onRequestFocusNext?.();
-      }
-    };
-
     const checkAnswer = () => {
       if (normalize(value) === normalize(correctAnswer)) {
         setIsAnsweredCorrectly(true);
-        finishInput(true, attemptsLeft);
+
+        onRequestFocusNext?.();
       } else {
         const updatedAttempts = attemptsLeft - 1;
         setAttemptsLeft(updatedAttempts);
-        finishInput(false, updatedAttempts);
+
+        if (updatedAttempts <= 0) onRequestFocusNext?.();
       }
     };
 
@@ -66,7 +68,7 @@ export const VerbInput = forwardRef<VerbInputRef, VerbInputProps>(
     };
 
     const handleBlur = () => {
-      if (value.trim() !== "" && !isAnsweredCorrectly && attemptsLeft > 0) {
+      if (value.trim() && !isAnsweredCorrectly && attemptsLeft > 0) {
         checkAnswer();
       }
     };
@@ -89,12 +91,6 @@ export const VerbInput = forwardRef<VerbInputRef, VerbInputProps>(
         return () => clearTimeout(timer);
       }
     }, [isAnsweredCorrectly]);
-
-    useEffect(() => {
-      if (isAnsweredCorrectly || attemptsLeft <= 0) {
-        onAnswer?.();
-      }
-    }, [isAnsweredCorrectly, attemptsLeft, onAnswer]);
 
     return (
       <Input

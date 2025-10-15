@@ -1,17 +1,14 @@
+import { useMemo } from "react";
 import { type ColumnDef, type CellContext } from "@tanstack/react-table";
 import type { ApiSchemas } from "@/shared/api/schema";
 import { VerbInput } from "@/features/study-verbs/ui/verb-input/verb-input";
 import { HEADERS } from "./constants";
 import { type useFocusInputControl } from "./use-focus-input-control";
-import { useDialogContext } from "@/app/context/dialog-context";
-import { useMemo } from "react";
 
 type FocusApi = ReturnType<typeof useFocusInputControl>;
 
 export function useTableColumns(focusApi: FocusApi) {
-  const { registerInput, focusNext, areAllFilled, getResults } = focusApi;
-
-  const { openDialog } = useDialogContext();
+  const { registerInput, focusNext } = focusApi;
 
   const columns = useMemo<ColumnDef<ApiSchemas["Verb"]>[]>(() => {
     return [
@@ -30,12 +27,6 @@ export function useTableColumns(focusApi: FocusApi) {
             <VerbInput
               ref={(el) => registerInput(rowId, colIndex, el)}
               correctAnswer={correctAnswer}
-              onAnswer={() => {
-                if (areAllFilled()) {
-                  const results = getResults();
-                  openDialog("feedback", results);
-                }
-              }}
               onRequestFocusNext={() => focusNext(rowId, colIndex)}
             />
           );
@@ -51,7 +42,7 @@ export function useTableColumns(focusApi: FocusApi) {
         ),
       },
     ];
-  }, [registerInput, focusNext, areAllFilled, getResults, openDialog]);
+  }, [registerInput, focusNext]);
 
   return { columns };
 }

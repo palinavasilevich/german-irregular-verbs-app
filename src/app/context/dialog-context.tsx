@@ -26,6 +26,7 @@ export const DialogProvider = ({ children }: React.PropsWithChildren) => {
   }) as DialogContextType["openDialog"];
 
   const closeDialog = () => {
+    console.log("closeDialog");
     setCurrentDialog(null);
     setFeedbackResults(null);
   };

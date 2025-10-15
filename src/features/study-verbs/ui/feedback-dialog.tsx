@@ -14,12 +14,26 @@ import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/app/router/routes";
 import { HomeIcon, RepeatIcon, X as CrossIcon } from "lucide-react";
 
-export function FeedbackDialog() {
+type FeedbackDialogProps = {
+  resetInputs: () => void;
+  focusFirstUnfilled: () => void;
+};
+
+export function FeedbackDialog({
+  resetInputs,
+  focusFirstUnfilled,
+}: FeedbackDialogProps) {
   const navigate = useNavigate();
   const { currentDialog, feedbackResults, closeDialog } = useDialogContext();
 
   const handleOpenAllVerbsPage = () => {
     navigate(ROUTES.VERBS);
+    closeDialog();
+  };
+
+  const handleLearnVerbsAgain = () => {
+    resetInputs();
+    focusFirstUnfilled();
     closeDialog();
   };
 
@@ -51,7 +65,7 @@ export function FeedbackDialog() {
         </div>
 
         <AlertDialogFooter className="flex justify-center mt-4">
-          <AlertDialogAction onClick={closeDialog}>
+          <AlertDialogAction onClick={handleLearnVerbsAgain}>
             <RepeatIcon />
             Learn verbs again
           </AlertDialogAction>
