@@ -22,7 +22,7 @@ export function StudyVerbsPage() {
 
   const focusApi = useFocusInputControl();
   const { columns } = useTableColumns(focusApi);
-  const { focusFirstUnfilledOrFirst } = focusApi;
+  const { focusFirstUnfilled } = focusApi;
 
   useEffect(() => {
     if (verbs?.length) {
@@ -34,10 +34,10 @@ export function StudyVerbsPage() {
 
   useEffect(() => {
     if (shuffledVerbs.length > 0) {
-      const t = setTimeout(() => focusFirstUnfilledOrFirst(), 100);
+      const t = setTimeout(() => focusFirstUnfilled(), 100);
       return () => clearTimeout(t);
     }
-  }, [shuffledVerbs, focusFirstUnfilledOrFirst]);
+  }, [shuffledVerbs, focusFirstUnfilled]);
 
   const content = useMemo(() => {
     if (isPending) return <Loader />;

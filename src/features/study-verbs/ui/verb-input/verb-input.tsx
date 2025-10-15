@@ -19,7 +19,7 @@ export type VerbInputRef = {
 
 type VerbInputProps = {
   correctAnswer: string;
-  onAnswer?: (result: { isCorrect: boolean; attemptsLeft: number }) => void;
+  onAnswer?: () => void;
   onRequestFocusNext?: () => void;
 };
 
@@ -92,10 +92,7 @@ export const VerbInput = forwardRef<VerbInputRef, VerbInputProps>(
 
     useEffect(() => {
       if (isAnsweredCorrectly || attemptsLeft <= 0) {
-        onAnswer?.({
-          isCorrect: isAnsweredCorrectly,
-          attemptsLeft,
-        });
+        onAnswer?.();
       }
     }, [isAnsweredCorrectly, attemptsLeft, onAnswer]);
 

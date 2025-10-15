@@ -12,7 +12,7 @@ export function useFocusInputControl() {
     []
   );
 
-  const focusFirstUnfilledOrFirst = useCallback(() => {
+  const focusFirstUnfilled = useCallback(() => {
     for (const row of Object.values(inputsRef.current)) {
       const firstUnfilled = row.find(
         (input) => input && !input.isAnsweredCorrectly && input.attemptsLeft > 0
@@ -53,15 +53,10 @@ export function useFocusInputControl() {
         }
       }
 
-      focusFirstUnfilledOrFirst();
+      focusFirstUnfilled();
     },
-    [focusFirstUnfilledOrFirst]
+    [focusFirstUnfilled]
   );
-
-  const focusFirstInput = useCallback(() => {
-    const firstRow = Object.values(inputsRef.current)[0];
-    firstRow?.[0]?.focus();
-  }, []);
 
   const getResults = useCallback(() => {
     let correct = 0;
@@ -89,8 +84,7 @@ export function useFocusInputControl() {
   return {
     registerInput,
     focusNext,
-    focusFirstInput,
-    focusFirstUnfilledOrFirst,
+    focusFirstUnfilled,
     areAllFilled,
     getResults,
   };
