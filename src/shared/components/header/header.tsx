@@ -27,14 +27,25 @@ export function AppHeader() {
         <nav className="flex items-center gap-4">
           <Button
             variant="link"
+            disabled={location.pathname === ROUTES.VERBS}
+            onClick={() => navigate(ROUTES.VERBS)}
             className={
               location.pathname === ROUTES.VERBS
                 ? cn(cls.link, cls.active)
                 : cls.link
             }
           >
-            <Link to={ROUTES.VERBS}>Verbs List</Link>
+            Verbs List
           </Button>
+          {/* 
+          <NavLink
+            to={ROUTES.VERBS}
+            className={({ isActive }) =>
+              isActive ? cn(cls.link, cls.active) : cls.link
+            }
+          >
+            Verbs List
+          </NavLink> */}
 
           <Button
             variant="link"
