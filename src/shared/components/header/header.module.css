@@ -1,11 +1,15 @@
 .link {
+  padding: 0;
   position: relative;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .active::after,
 .link:hover::after {
   position: absolute;
-  bottom: 0;
+  bottom: 3px;
   left: 0;
 
   content: "";
@@ -15,4 +19,8 @@
 
 .link:hover {
   color: purple;
+}
+
+.link:disabled {
+  opacity: 1;
 }

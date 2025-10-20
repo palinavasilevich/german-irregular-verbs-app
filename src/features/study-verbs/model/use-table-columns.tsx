@@ -15,7 +15,7 @@ export function useTableColumns(focusApi: FocusApi) {
       ...HEADERS.map(({ accessorKey, title }, colIndex) => ({
         accessorKey,
         header: () => (
-          <div className="text-sm md:text-base font-bold capitalize">
+          <div className="p-4 text-sm md:text-base font-bold capitalize">
             {title}
           </div>
         ),
@@ -38,7 +38,7 @@ export function useTableColumns(focusApi: FocusApi) {
           <span className="md:text-base font-bold capitalize">Übersetzung</span>
         ),
         cell: ({ row }) => (
-          <div className="py-2">{row.original.translation}</div>
+          <div className="py-4">{row.original.translation}</div>
         ),
       },
     ];

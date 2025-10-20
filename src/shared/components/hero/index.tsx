@@ -1,10 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/shared/ui/kit/button";
 import { ROUTES } from "@/app/router/routes";
 
 import heroImg from "@/assets/img/hero.svg";
+import { useRandomStudyVerbs } from "@/features/study-verbs/model/use-random-study-verbs";
 
 export function Hero() {
+  const navigate = useNavigate();
+  const { refresh } = useRandomStudyVerbs();
+
+  const handleStudyRandomVerbs = () => {
+    refresh();
+    navigate(ROUTES.RANDOM_VERBS);
+  };
+
   return (
     <section className="py-12 xl:py-24 xl:pt-28 bg-no-repeat bg-bottom bg-cover dark:bg-none">
       <div className="container mx-auto h-[50dvh]">
@@ -18,12 +27,16 @@ export function Hero() {
               and search through this collection of must-know irregular verbs.
             </p>
             <div className="flex flex-col gap-y-3 md:flex-row gap-x-3 mx-auto xl:mx-0 mb-12">
-              <Button className="gap-x-2">
-                <Link to={ROUTES.VERBS}> Verb list </Link>
+              <Button className="gap-x-2 ">
+                <Link to={ROUTES.VERBS}>Verbs list</Link>
               </Button>
 
-              <Button variant="secondary" className="gap-x-2">
-                <Link to={ROUTES.RANDOM_VERBS}>Practice</Link>
+              <Button
+                variant="secondary"
+                className="gap-x-2 cursor-pointer"
+                onClick={handleStudyRandomVerbs}
+              >
+                Practice
               </Button>
             </div>
           </div>

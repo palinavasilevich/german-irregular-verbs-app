@@ -10,8 +10,10 @@ export function VerbsTableLayout({
   footer,
 }: VerbsTableLayoutProps) {
   return (
-    <div className="w-full flex flex-col gap-4">
-      <div className="flex items-center justify-between">{header}</div>
+    <div className="w-full flex flex-col">
+      {header && (
+        <div className="mb-4 flex items-center justify-between">{header}</div>
+      )}
       {children}
       {footer}
     </div>

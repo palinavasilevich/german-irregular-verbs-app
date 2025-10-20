@@ -36,7 +36,7 @@ export function StudyVerbsTable<TData, TValue>({
 
   return (
     <VerbsTableLayout>
-      <div className="w-full flex flex-col h-[60dvh]">
+      <div className="w-full flex flex-col h-[77dvh]">
         <div className="overflow-hidden rounded-md border flex flex-col">
           <Table>
             <TableHeader className="sticky top-0 z-10 bg-background shadow-md">
