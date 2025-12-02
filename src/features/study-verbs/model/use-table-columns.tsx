@@ -27,6 +27,7 @@ export function useTableColumns(focusApi: FocusApi) {
             <VerbInput
               ref={(el) => registerInput(rowId, colIndex, el)}
               correctAnswer={correctAnswer}
+              id={rowId}
               onRequestFocusNext={() => focusNext(rowId, colIndex)}
             />
           );

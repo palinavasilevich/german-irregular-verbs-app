@@ -59,16 +59,27 @@ export function useFocusInputControl() {
   );
 
   const getResults = useCallback(() => {
-    let correct = 0;
-    let incorrect = 0;
-    for (const row of Object.values(inputsRef.current)) {
+    const incorrectIds: string[] = [];
+
+    const inputs = Object.values(inputsRef.current);
+
+    for (const row of inputs) {
       for (const input of row) {
         if (!input) continue;
-        if (input.isAnsweredCorrectly) correct++;
-        else if (input.attemptsLeft <= 0) incorrect++;
+
+        if (!input.isAnsweredCorrectly) {
+          incorrectIds.push(input.inputId);
+        }
       }
     }
-    return { correct, incorrect };
+
+    const total = inputs.flat().filter(Boolean).length;
+
+    return {
+      correct: total - incorrectIds.length,
+      incorrect: incorrectIds.length,
+      incorrectIds,
+    };
   }, []);
 
   const areAllFilled = useCallback((): boolean => {

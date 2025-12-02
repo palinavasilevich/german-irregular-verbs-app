@@ -15,25 +15,21 @@ import { ROUTES } from "@/app/router/routes";
 import { HomeIcon, RepeatIcon, X as CrossIcon } from "lucide-react";
 
 type FeedbackDialogProps = {
-  resetInputs: () => void;
-  focusFirstUnfilled: () => void;
+  onLearnVerbsAgain: () => void;
+  onRepeatIncorrect: () => void;
+  onClose: () => void;
 };
 
 export function FeedbackDialog({
-  resetInputs,
-  focusFirstUnfilled,
+  onLearnVerbsAgain,
+  onRepeatIncorrect,
+  onClose,
 }: FeedbackDialogProps) {
   const navigate = useNavigate();
   const { currentDialog, feedbackResults, closeDialog } = useDialogContext();
 
   const handleOpenAllVerbsPage = () => {
     navigate(ROUTES.VERBS);
-    closeDialog();
-  };
-
-  const handleLearnVerbsAgain = () => {
-    resetInputs();
-    focusFirstUnfilled();
     closeDialog();
   };
 
@@ -44,9 +40,9 @@ export function FeedbackDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <Button
-            className="w-8 h-8 p-0 absolute right-3 top-2"
+            className="w-8 h-8 p-0 absolute right-3 top-2 cursor-pointer"
             variant="ghost"
-            onClick={closeDialog}
+            onClick={onClose}
           >
             <CrossIcon className="h-4 w-4" />
           </Button>
@@ -64,13 +60,24 @@ export function FeedbackDialog({
           <p>❌ Falsche Antworten: {feedbackResults.incorrect}</p>
         </div>
 
-        <AlertDialogFooter className="flex justify-center mt-4">
-          <AlertDialogAction onClick={handleLearnVerbsAgain}>
+        <AlertDialogFooter className="flex sm:flex-col sm:justify-center mt-4 gap-2">
+          {feedbackResults.incorrect > 0 && (
+            <Button className="cursor-pointer" onClick={onRepeatIncorrect}>
+              Repeat only incorrect verbs
+            </Button>
+          )}
+          <AlertDialogAction
+            className="cursor-pointer"
+            onClick={onLearnVerbsAgain}
+          >
             <RepeatIcon />
             Learn verbs again
           </AlertDialogAction>
 
-          <AlertDialogAction onClick={handleOpenAllVerbsPage}>
+          <AlertDialogAction
+            className="cursor-pointer"
+            onClick={handleOpenAllVerbsPage}
+          >
             <HomeIcon />
             All verbs
           </AlertDialogAction>

@@ -2,13 +2,18 @@ import { createContext, useContext, useState } from "react";
 
 type DialogType = "feedback";
 
-type FeedbackResults = { correct: number; incorrect: number };
+type FeedbackResults = {
+  correct: number;
+  incorrect: number;
+  incorrectIds: string[];
+};
 
 type DialogContextType = {
   currentDialog: DialogType | null;
   feedbackResults: FeedbackResults | null;
   openDialog: (type: DialogType, results?: FeedbackResults) => void;
   closeDialog: () => void;
+  resetFeedbackResults: () => void;
 };
 
 const DialogContext = createContext<DialogContextType | undefined>(undefined);
@@ -26,8 +31,10 @@ export const DialogProvider = ({ children }: React.PropsWithChildren) => {
   }) as DialogContextType["openDialog"];
 
   const closeDialog = () => {
-    console.log("closeDialog");
     setCurrentDialog(null);
+  };
+
+  const resetFeedbackResults = () => {
     setFeedbackResults(null);
   };
 
@@ -38,6 +45,7 @@ export const DialogProvider = ({ children }: React.PropsWithChildren) => {
         feedbackResults,
         openDialog,
         closeDialog,
+        resetFeedbackResults,
       }}
     >
       {children}

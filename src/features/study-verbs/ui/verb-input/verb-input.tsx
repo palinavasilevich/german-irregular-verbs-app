@@ -14,17 +14,19 @@ import { MAX_ATTEMPTS } from "../../model/constants";
 export type VerbInputRef = {
   isAnsweredCorrectly: boolean;
   attemptsLeft: number;
+  inputId: string;
   focus: () => void;
   reset: () => void;
 };
 
 type VerbInputProps = {
+  id: string;
   correctAnswer: string;
   onRequestFocusNext?: () => void;
 };
 
 export const VerbInput = forwardRef<VerbInputRef, VerbInputProps>(
-  ({ correctAnswer, onRequestFocusNext }, ref) => {
+  ({ id, correctAnswer, onRequestFocusNext }, ref) => {
     const [value, setValue] = useState("");
     const [isAnsweredCorrectly, setIsAnsweredCorrectly] = useState(false);
     const [attemptsLeft, setAttemptsLeft] = useState(MAX_ATTEMPTS);
@@ -32,9 +34,10 @@ export const VerbInput = forwardRef<VerbInputRef, VerbInputProps>(
     const inputRef = useRef<HTMLInputElement>(null);
 
     useImperativeHandle(ref, () => ({
-      focus: () => inputRef.current?.focus(),
       isAnsweredCorrectly,
       attemptsLeft,
+      inputId: id,
+      focus: () => inputRef.current?.focus(),
       reset: () => {
         setValue("");
         setIsAnsweredCorrectly(false);

@@ -10,6 +10,8 @@ import { useTableColumns } from "@/features/study-verbs/model/use-table-columns"
 import { useFocusInputControl } from "@/features/study-verbs/model/use-focus-input-control";
 import { FeedbackDialog } from "@/features/study-verbs/ui/feedback-dialog";
 import { useDialogContext } from "@/app/context/dialog-context";
+import { Button } from "@/shared/ui/kit/button";
+import { RepeatIcon } from "lucide-react";
 
 export function StudyVerbsPage() {
   const location = useLocation();
@@ -27,19 +29,58 @@ export function StudyVerbsPage() {
   const { focusFirstUnfilled, areAllFilled, getResults, resetInputs } =
     focusApi;
 
-  const { openDialog } = useDialogContext();
+  const { feedbackResults, openDialog, closeDialog, resetFeedbackResults } =
+    useDialogContext();
+
+  const [isFeedbackShown, setIsFeedbackShown] = useState(false);
+  const [shouldFocus, setShouldFocus] = useState(false);
+  const [isLearnVerbsAgainButtonShown, setIsLearnVerbsAgainButtonShown] =
+    useState(false);
+
+  const handleLearnVerbsAgain = () => {
+    resetInputs();
+    setIsFeedbackShown(false);
+    resetFeedbackResults();
+    setShuffledVerbs(shuffle(verbs || []));
+    closeDialog();
+    setShouldFocus(true);
+    setIsLearnVerbsAgainButtonShown(false);
+  };
+
+  const handleRepeatIncorrect = () => {
+    const incorrectIds = feedbackResults?.incorrectIds || [];
+    if (incorrectIds.length === 0) return;
+
+    const newVerbs = (verbs || []).filter((v) => incorrectIds.includes(v.id));
+    setShuffledVerbs(shuffle(newVerbs));
+    resetInputs();
+    closeDialog();
+    setIsFeedbackShown(false);
+    setShouldFocus(true);
+    setIsLearnVerbsAgainButtonShown(false);
+  };
 
   useEffect(() => {
+    if (shouldFocus && shuffledVerbs.length > 0) {
+      focusFirstUnfilled();
+      setShouldFocus(false);
+    }
+  }, [shuffledVerbs, focusFirstUnfilled, shouldFocus]);
+
+  useEffect(() => {
+    if (isFeedbackShown) return;
+
     const interval = setInterval(() => {
       if (areAllFilled()) {
         const results = getResults();
         openDialog("feedback", results);
+        setIsFeedbackShown(true);
         clearInterval(interval);
       }
     }, 200);
 
     return () => clearInterval(interval);
-  }, [areAllFilled, getResults, openDialog]);
+  }, [areAllFilled, getResults, openDialog, isFeedbackShown]);
 
   useEffect(() => {
     if (verbs?.length) setShuffledVerbs(shuffle(verbs));
@@ -47,10 +88,12 @@ export function StudyVerbsPage() {
   }, [verbs]);
 
   useEffect(() => {
-    if (shuffledVerbs.length > 0) {
-      const t = setTimeout(() => focusFirstUnfilled(), 100);
-      return () => clearTimeout(t);
-    }
+    if (shuffledVerbs.length === 0) return;
+
+    const t = setTimeout(() => {
+      focusFirstUnfilled();
+    }, 100);
+    return () => clearTimeout(t);
   }, [shuffledVerbs, focusFirstUnfilled]);
 
   const content = useMemo(() => {
@@ -68,10 +111,31 @@ export function StudyVerbsPage() {
 
   return (
     <PageContent title="Study Verbs">
+      {isLearnVerbsAgainButtonShown && (
+        <div className="flex gap-4 mb-6">
+          {feedbackResults && feedbackResults.incorrect > 0 && (
+            <Button className="cursor-pointer" onClick={handleRepeatIncorrect}>
+              <RepeatIcon />
+              Repeat only incorrect verbs
+            </Button>
+          )}
+          <Button className="cursor-pointer" onClick={handleLearnVerbsAgain}>
+            <RepeatIcon />
+            Learn verbs again
+          </Button>
+        </div>
+      )}
+
       {content}
+
       <FeedbackDialog
-        resetInputs={resetInputs}
-        focusFirstUnfilled={focusFirstUnfilled}
+        onClose={() => {
+          focusFirstUnfilled();
+          closeDialog();
+          setIsLearnVerbsAgainButtonShown(true);
+        }}
+        onLearnVerbsAgain={handleLearnVerbsAgain}
+        onRepeatIncorrect={handleRepeatIncorrect}
       />
     </PageContent>
   );
