@@ -60,7 +60,6 @@ export function useFocusInputControl() {
 
   const getResults = useCallback(() => {
     const incorrectIds: string[] = [];
-
     const inputs = Object.values(inputsRef.current);
 
     for (const row of inputs) {
@@ -82,15 +81,6 @@ export function useFocusInputControl() {
     };
   }, []);
 
-  const areAllFilled = useCallback((): boolean => {
-    return Object.values(inputsRef.current).every((row) =>
-      row.every(
-        (input) =>
-          input && (input.isAnsweredCorrectly || input.attemptsLeft <= 0)
-      )
-    );
-  }, []);
-
   const resetInputs = useCallback(() => {
     for (const row of Object.values(inputsRef.current)) {
       for (const input of row) {
@@ -103,7 +93,6 @@ export function useFocusInputControl() {
     registerInput,
     focusNext,
     focusFirstUnfilled,
-    areAllFilled,
     getResults,
     resetInputs,
   };

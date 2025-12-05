@@ -7,11 +7,14 @@ import { type useFocusInputControl } from "./use-focus-input-control";
 
 type FocusApi = ReturnType<typeof useFocusInputControl>;
 
-export function useTableColumns(focusApi: FocusApi) {
+export function useTableColumns(
+  focusApi: FocusApi,
+  onInputComplete?: () => void
+) {
   const { registerInput, focusNext } = focusApi;
 
-  const columns = useMemo<ColumnDef<ApiSchemas["Verb"]>[]>(() => {
-    return [
+  const columns = useMemo<ColumnDef<ApiSchemas["Verb"]>[]>(
+    () => [
       ...HEADERS.map(({ accessorKey, title }, colIndex) => ({
         accessorKey,
         header: () => (
@@ -21,7 +24,7 @@ export function useTableColumns(focusApi: FocusApi) {
         ),
         cell: ({ row }: CellContext<ApiSchemas["Verb"], unknown>) => {
           const correctAnswer = String(row.getValue(accessorKey));
-          const rowId = row.original.id;
+          const rowId = row.original.id; // как у тебя было
 
           return (
             <VerbInput
@@ -29,6 +32,7 @@ export function useTableColumns(focusApi: FocusApi) {
               correctAnswer={correctAnswer}
               id={rowId}
               onRequestFocusNext={() => focusNext(rowId, colIndex)}
+              onComplete={onInputComplete}
             />
           );
         },
@@ -42,8 +46,9 @@ export function useTableColumns(focusApi: FocusApi) {
           <div className="py-4">{row.original.translation}</div>
         ),
       },
-    ];
-  }, [registerInput, focusNext]);
+    ],
+    [registerInput, focusNext, onInputComplete]
+  );
 
   return { columns };
 }

@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { shuffle } from "@/shared/lib/array";
 import { useDialogContext } from "@/app/context/dialog-context";
 import { useFocusInputControl } from "./use-focus-input-control";
 import { useTableColumns } from "./use-table-columns";
+import { HEADERS } from "./constants";
 import type { ApiSchemas } from "@/shared/api/schema";
 
 type UseStudyVerbsFlowProps = {
@@ -15,49 +16,50 @@ export function useStudyVerbsFlow({ verbs }: UseStudyVerbsFlowProps) {
   const [shouldFocus, setShouldFocus] = useState(false);
   const [isLearnAgainShown, setIsLearnAgainShown] = useState(false);
 
+  const [completedCount, setCompletedCount] = useState(0);
+
   const focusApi = useFocusInputControl();
-  const { columns } = useTableColumns(focusApi);
-  const { focusFirstUnfilled, areAllFilled, getResults, resetInputs } =
-    focusApi;
+  const { focusFirstUnfilled, getResults, resetInputs } = focusApi;
 
   const { feedbackResults, openDialog, closeDialog, resetFeedbackResults } =
     useDialogContext();
 
-  // shuffle on first load
+  const totalInputs = useMemo(
+    () => shuffled.length * HEADERS.length,
+    [shuffled.length]
+  );
+
+  const handleInputComplete = useCallback(() => {
+    setCompletedCount((prev) => prev + 1);
+  }, []);
+
+  const { columns } = useTableColumns(focusApi, handleInputComplete);
+
+  // shuffle on first load / when verbs change
   useEffect(() => {
     if (verbs?.length) {
       setShuffled(shuffle(verbs));
       setShouldFocus(true);
       setIsFeedbackShown(false);
+      setCompletedCount(0);
     } else {
       setShuffled([]);
+      setCompletedCount(0);
     }
   }, [verbs]);
 
-  // auto-check finished inputs
+  // show feedback dialog
   useEffect(() => {
     if (isFeedbackShown) return;
+    if (totalInputs === 0) return;
+    if (completedCount < totalInputs) return;
 
-    const interval = setInterval(() => {
-      if (areAllFilled()) {
-        const results = getResults();
-        openDialog("feedback", results);
-        setIsFeedbackShown(true);
-        clearInterval(interval);
-      }
-    }, 200);
-
-    return () => clearInterval(interval);
-  }, [areAllFilled, getResults, openDialog, isFeedbackShown]);
+    const results = getResults();
+    openDialog("feedback", results);
+    setIsFeedbackShown(true);
+  }, [completedCount, totalInputs, isFeedbackShown, getResults, openDialog]);
 
   // focus on first empty
-  //   useEffect(() => {
-  //     if (shouldFocus && shuffled.length > 0) {
-  //       focusFirstUnfilled();
-  //       setShouldFocus(false);
-  //     }
-  //   }, [shuffled, focusFirstUnfilled, shouldFocus]);
-
   useEffect(() => {
     if (shouldFocus && shuffled.length > 0) {
       const t = setTimeout(() => {
@@ -68,25 +70,26 @@ export function useStudyVerbsFlow({ verbs }: UseStudyVerbsFlowProps) {
     }
   }, [shouldFocus, shuffled, focusFirstUnfilled]);
 
-  const learnAgain = () => {
+  const resetRoundCommon = () => {
     resetInputs();
     resetFeedbackResults();
     setIsFeedbackShown(false);
-    setShuffled(shuffle(verbs || []));
+    setCompletedCount(0);
     setShouldFocus(true);
     closeDialog();
+  };
+
+  const learnAgain = () => {
+    resetRoundCommon();
+    setShuffled(shuffle(verbs || []));
   };
 
   const repeatIncorrect = () => {
     const incorrect = feedbackResults?.incorrectIds || [];
     const next = (verbs || []).filter((v) => incorrect.includes(v.id));
 
-    resetInputs();
-    resetFeedbackResults();
-    setIsFeedbackShown(false);
+    resetRoundCommon();
     setShuffled(shuffle(next));
-    setShouldFocus(true);
-    closeDialog();
   };
 
   return {
