@@ -38,7 +38,7 @@ export function VerbsTablePagination<TData>({
               table.setPageSize(Number(value));
             }}
           >
-            <SelectTrigger className="h-8 w-[70px]">
+            <SelectTrigger className="h-8 w-[70px] bg-background cursor-pointer">
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
@@ -58,7 +58,7 @@ export function VerbsTablePagination<TData>({
           <Button
             variant="outline"
             size="icon"
-            className="hidden size-8 lg:flex"
+            className="hidden size-8 lg:flex cursor-pointer"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
           >
@@ -68,7 +68,7 @@ export function VerbsTablePagination<TData>({
           <Button
             variant="outline"
             size="icon"
-            className="size-8"
+            className="size-8 cursor-pointer"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
@@ -78,7 +78,7 @@ export function VerbsTablePagination<TData>({
           <Button
             variant="outline"
             size="icon"
-            className="size-8"
+            className="size-8 cursor-pointer"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
@@ -88,7 +88,7 @@ export function VerbsTablePagination<TData>({
           <Button
             variant="outline"
             size="icon"
-            className="hidden size-8 lg:flex"
+            className="hidden size-8 lg:flex cursor-pointer"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >

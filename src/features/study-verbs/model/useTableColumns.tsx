@@ -1,15 +1,15 @@
 import { useMemo } from "react";
 import { type ColumnDef, type CellContext } from "@tanstack/react-table";
 import type { ApiSchemas } from "@/shared/api/schema";
-import { VerbInput } from "@/features/study-verbs/ui/verb-input/verb-input";
+import { VerbInput } from "@/features/study-verbs/ui/verb-input/VerbInput";
 import { HEADERS } from "./constants";
-import { type useFocusInputControl } from "./use-focus-input-control";
+import { type useFocusInputControl } from "./useFocusInputControl";
 
 type FocusApi = ReturnType<typeof useFocusInputControl>;
 
 export function useTableColumns(
   focusApi: FocusApi,
-  onInputComplete?: () => void
+  onInputComplete?: () => void,
 ) {
   const { registerInput, focusNext } = focusApi;
 
@@ -47,7 +47,7 @@ export function useTableColumns(
         ),
       },
     ],
-    [registerInput, focusNext, onInputComplete]
+    [registerInput, focusNext, onInputComplete],
   );
 
   return { columns };

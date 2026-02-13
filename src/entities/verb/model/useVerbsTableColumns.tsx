@@ -3,7 +3,7 @@ import type { ApiSchemas } from "@/shared/api/schema";
 import { Checkbox } from "@/shared/ui/kit/checkbox";
 import { useVerbStore } from "./store";
 
-import { VerbsTableColumnHeaderSort } from "../ui/verbs-table/verbs-table-column-header-sort";
+import { VerbsTableColumnHeaderSort } from "../ui/verbs-table/VerbsTableColumnHeaderSort";
 
 type UseVerbsTableColumnsProps = {
   withSelection?: boolean;
@@ -36,7 +36,7 @@ export function useVerbsTableColumns({
                 ]);
               else
                 setSelectedVerbsIds(
-                  selectedVerbsIds.filter((id) => !allIds.includes(id))
+                  selectedVerbsIds.filter((id) => !allIds.includes(id)),
                 );
             }}
             aria-label="Select all"
@@ -94,7 +94,7 @@ export function useVerbsTableColumns({
         <span className="md:text-base font-bold capitalize">Übersetzung</span>
       ),
       cell: ({ row }) => <div className="py-2">{row.original.translation}</div>,
-    }
+    },
   );
 
   return columns;

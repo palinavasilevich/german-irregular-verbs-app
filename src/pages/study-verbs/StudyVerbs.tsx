@@ -1,13 +1,13 @@
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { useGetVerbsByIdsQuery } from "@/entities/verb/api/use-verbs-query";
-import { PageContent } from "@/shared/components/layout/page-content";
-import { StudyVerbsTable } from "@/features/study-verbs/ui/table/study-verbs-table";
+import { useGetVerbsByIdsQuery } from "@/entities/verb/api/useVerbsQuery";
+import { StudyVerbsTable } from "@/features/study-verbs/ui/table/StudyVerbsTable";
 import { Loader } from "@/shared/ui/loader/loader";
-import { FeedbackDialog } from "@/features/study-verbs/ui/feedback-dialog";
+import { FeedbackDialog } from "@/features/study-verbs/ui/FeedbackDialog";
 import { Button } from "@/shared/ui/kit/button";
 import { RepeatIcon } from "lucide-react";
-import { useStudyVerbsFlow } from "@/features/study-verbs/model/use-study-verbs-flow";
+import { useStudyVerbsFlow } from "@/features/study-verbs/model/useStudyVerbsFlow";
+import { PageContent } from "@/app/layout/PageContent";
 
 export function StudyVerbsPage() {
   const location = useLocation();

@@ -1,5 +1,5 @@
 import { useCallback, useRef } from "react";
-import type { VerbInputRef } from "../ui/verb-input/verb-input";
+import type { VerbInputRef } from "../ui/verb-input/VerbInput";
 
 export function useFocusInputControl() {
   const inputsRef = useRef<Record<string, Array<VerbInputRef | undefined>>>({});
@@ -9,13 +9,14 @@ export function useFocusInputControl() {
       if (!inputsRef.current[rowId]) inputsRef.current[rowId] = [];
       inputsRef.current[rowId][colIndex] = ref ?? undefined;
     },
-    []
+    [],
   );
 
   const focusFirstUnfilled = useCallback(() => {
     for (const row of Object.values(inputsRef.current)) {
       const firstUnfilled = row.find(
-        (input) => input && !input.isAnsweredCorrectly && input.attemptsLeft > 0
+        (input) =>
+          input && !input.isAnsweredCorrectly && input.attemptsLeft > 0,
       );
       if (firstUnfilled) {
         firstUnfilled.focus();
@@ -45,7 +46,7 @@ export function useFocusInputControl() {
         const nextRow = inputsRef.current[rowIds[r]];
         const firstUnfilled = nextRow.find(
           (input) =>
-            input && !input.isAnsweredCorrectly && input.attemptsLeft > 0
+            input && !input.isAnsweredCorrectly && input.attemptsLeft > 0,
         );
         if (firstUnfilled) {
           firstUnfilled.focus();
@@ -55,7 +56,7 @@ export function useFocusInputControl() {
 
       focusFirstUnfilled();
     },
-    [focusFirstUnfilled]
+    [focusFirstUnfilled],
   );
 
   const getResults = useCallback(() => {

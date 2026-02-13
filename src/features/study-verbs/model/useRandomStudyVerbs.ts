@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { useGetAllVerbsQuery } from "@/entities/verb/api/use-verbs-query";
+import { useGetAllVerbsQuery } from "@/entities/verb/api/useVerbsQuery";
 import { useVerbStore } from "@/entities/verb/model/store";
 
 export const useRandomStudyVerbs = () => {

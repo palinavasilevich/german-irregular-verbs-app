@@ -8,7 +8,7 @@ import {
   AlertDialogTitle,
 } from "@/shared/ui/kit/alert-dialog";
 
-import { useDialogContext } from "@/app/context/dialog-context";
+import { useDialogContext } from "@/app/context/DialogContext";
 import { Button } from "@/shared/ui/kit/button";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/app/router/routes";

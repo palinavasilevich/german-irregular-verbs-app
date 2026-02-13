@@ -1,44 +1,45 @@
 import { createBrowserRouter } from "react-router-dom";
-import { App } from "../App";
+
 import { ROUTES } from "@/app/router/routes";
-import { Providers } from "../providers";
+import { Providers } from "../Providers";
+import { RootLayout } from "../layout/RootLayout";
 
 export const router = createBrowserRouter([
   {
     element: (
       <Providers>
-        <App />
+        <RootLayout />
       </Providers>
     ),
     children: [
       {
         path: ROUTES.HOME,
-        lazy: () => import("@/pages/main-page/main-page"),
+        lazy: () => import("@/pages/main-page/MainPage"),
       },
 
       {
         path: ROUTES.VERBS,
-        lazy: () => import("@/pages/all-verbs/all-verbs"),
+        lazy: () => import("@/pages/all-verbs/AllVerbs"),
       },
 
       {
         path: ROUTES.VERB,
-        lazy: () => import("@/pages/verb/verb"),
+        lazy: () => import("@/pages/verb/Verb"),
       },
 
       {
         path: ROUTES.STUDY_VERBS,
-        lazy: () => import("@/pages/study-verbs/study-verbs"),
+        lazy: () => import("@/pages/study-verbs/StudyVerbs"),
       },
 
       {
         path: ROUTES.RANDOM_VERBS,
-        lazy: () => import("@/pages/random-verbs/random-verbs"),
+        lazy: () => import("@/pages/random-verbs/RandomVerbs"),
       },
 
       {
         path: ROUTES.FAVORITE_VERBS,
-        lazy: () => import("@/pages/favorite-verbs/favorite-verbs"),
+        lazy: () => import("@/pages/favorite-verbs/FavoriteVerbs"),
       },
     ],
   },

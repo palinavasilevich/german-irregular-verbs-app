@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { shuffle } from "@/shared/lib/array";
-import { useDialogContext } from "@/app/context/dialog-context";
-import { useFocusInputControl } from "./use-focus-input-control";
-import { useTableColumns } from "./use-table-columns";
+import { useDialogContext } from "@/app/context/DialogContext";
+import { useFocusInputControl } from "./useFocusInputControl";
+import { useTableColumns } from "./useTableColumns";
 import { HEADERS } from "./constants";
 import type { ApiSchemas } from "@/shared/api/schema";
 
@@ -26,7 +26,7 @@ export function useStudyVerbsFlow({ verbs }: UseStudyVerbsFlowProps) {
 
   const totalInputs = useMemo(
     () => shuffled.length * HEADERS.length,
-    [shuffled.length]
+    [shuffled.length],
   );
 
   const handleInputComplete = useCallback(() => {

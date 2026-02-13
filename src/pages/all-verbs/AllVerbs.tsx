@@ -1,8 +1,9 @@
-import { useGetAllVerbsQuery } from "@/entities/verb/api/use-verbs-query";
-import { useVerbsTableColumns } from "@/entities/verb/model/use-verbs-table-columns";
+import { PageContent } from "@/app/layout/PageContent";
+import { useGetAllVerbsQuery } from "@/entities/verb/api/useVerbsQuery";
+import { useVerbsTableColumns } from "@/entities/verb/model/useVerbsTableColumns";
 
-import { AllVerbsTable } from "@/features/select-verbs/ui/all-verbs-table";
-import { PageContent } from "@/shared/components/layout/page-content";
+import { AllVerbsTable } from "@/features/select-verbs/ui/AllVerbsTable";
+
 import { Loader } from "@/shared/ui/loader/loader";
 
 function AllVerbsPage() {
