@@ -6,7 +6,7 @@ import { Button } from "@/shared/ui/kit/button";
 import { Container } from "../Container";
 import { ROUTES } from "@/app/router/routes";
 
-import cls from "./header.module.css";
+import cls from "./Header.module.css";
 
 export function Header() {
   const location = useLocation();
