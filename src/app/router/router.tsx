@@ -24,7 +24,7 @@ export const router = createBrowserRouter([
 
       {
         path: ROUTES.VERB,
-        lazy: () => import("@/pages/verb/Verb"),
+        lazy: () => import("@/pages/verb/VerbPage"),
       },
 
       {
