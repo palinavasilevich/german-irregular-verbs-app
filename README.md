@@ -57,12 +57,12 @@ This separation improves predictability, testability, and scalability.
 
 ## 🏗 Frontend Architecture
 
-src/
- ├── app/        # App configuration and global providers (React Query, Router, etc.)
- ├── entries/    # Application bootstrap & routing setup
- ├── pages/      # Route-level pages
- ├── features/   # Feature-based modules (verbs, training, etc.)
- └── shared/     # Shared UI components, hooks, utilities
+    src/
+     ├── app/            # App configuration and global providers 
+     ├── entries/        # Application bootstrap & routing setup
+     ├── features/       # Feature-based modules
+     ├── pages/          # Route-level pages
+     ├── shared/         # Shared UI components, hooks, utilities
 
 ### Architectural Principles
 
