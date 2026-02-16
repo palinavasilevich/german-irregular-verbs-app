@@ -7,6 +7,7 @@ import { Container } from "../Container";
 import { ROUTES } from "@/app/router/routes";
 
 import cls from "./Header.module.css";
+import { LogoIcon } from "./LogoIcon";
 
 export function Header() {
   const location = useLocation();
@@ -23,11 +24,10 @@ export function Header() {
       <Container className="h-20 flex items-center justify-between">
         <Link
           to={ROUTES.HOME}
-          className="text-lg font-semibold uppercase text-center hover:text-purple-700"
+          className="flex flex-col items-center hover:text-header-link hover:fill-header-link"
         >
-          Mighty
-          <br />
-          Verbs
+          <LogoIcon width={50} height={50} />
+          <span className="font-semibold">Mighty Verbs</span>
         </Link>
 
         <nav className="flex items-center gap-6 text-sm">
