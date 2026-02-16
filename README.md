@@ -1,7 +1,7 @@
 # Mighty Verbs
 
 **Mighty Verbs** is a modern full-stack web application for learning
-German irregular verbs.\
+German irregular verbs.
 The project focuses on clean architecture, scalable structure, and a
 distraction-free learning experience.
 
@@ -9,11 +9,11 @@ distraction-free learning experience.
 
 ## ✨ Features
 
--   📚 Browse German irregular verbs\
--   🔍 Filter verbs via query parameters\
--   🧠 Interactive training mode\
--   ⚡ Fast and responsive UI\
--   🔄 Cached and optimized data fetching\
+-   📚 Browse German irregular verbs
+-   🔍 Filter verbs via query parameters
+-   🧠 Interactive training mode
+-   ⚡ Fast and responsive UI
+-   🔄 Cached and optimized data fetching
 -   🎯 Minimalistic, focused design
 
 ------------------------------------------------------------------------
@@ -25,13 +25,13 @@ scalability and maintainability.
 
 ## 🚀 Tech Stack
 
--   React\
--   TypeScript\
--   Vite\
--   Tailwind CSS\
--   Zustand\
--   @tanstack/react-query\
--   React Router\
+-   React
+-   TypeScript
+-   Vite
+-   Tailwind CSS
+-   Zustand
+-   @tanstack/react-query
+-   React Router
 -   Fetch API
 
 ------------------------------------------------------------------------
@@ -40,15 +40,15 @@ scalability and maintainability.
 
 ### Client State (Zustand)
 
--   Training mode settings\
--   UI state\
+-   Training mode settings
+-   UI state
 -   Local progress
 
 ### Server State (React Query)
 
--   Fetching verbs\
--   Caching responses\
--   Background refetching\
+-   Fetching verbs
+-   Caching responses
+-   Background refetching
 -   Loading & error handling
 
 This separation improves predictability, testability, and scalability.
@@ -66,10 +66,10 @@ This separation improves predictability, testability, and scalability.
 
 ### Architectural Principles
 
--   Feature-based structure\
--   Clear separation of concerns\
--   Strong typing across layers\
--   Reusable and composable components\
+-   Feature-based structure
+-   Clear separation of concerns
+-   Strong typing across layers
+-   Reusable and composable components
 -   Clean API abstraction layer
 
 ------------------------------------------------------------------------
@@ -91,8 +91,8 @@ Environment variable:
 
 The backend is built using:
 
--   Hono.js\
--   Prisma\
+-   Hono.js
+-   Prisma
 -   PostgreSQL
 
 It provides REST endpoints for retrieving and filtering irregular verbs.
@@ -101,20 +101,20 @@ It provides REST endpoints for retrieving and filtering irregular verbs.
 
 # 🎯 Project Goals
 
--   Provide an intuitive tool for learning German irregular verbs\
--   Maintain production-ready architecture\
--   Demonstrate modern React patterns\
+-   Provide an intuitive tool for learning German irregular verbs
+-   Maintain production-ready architecture
+-   Demonstrate modern React patterns
 -   Ensure scalability for future features:
-    -   Authentication\
-    -   Progress tracking\
-    -   Spaced repetition\
+    -   Authentication
+    -   Progress tracking
+    -   Spaced repetition
     -   User accounts
 
 ------------------------------------------------------------------------
 
 # 📌 Future Improvements
 
--   Progress persistence\
--   User statistics dashboard\
--   Dark mode\
+-   Progress persistence
+-   User statistics dashboard
+-   Dark mode
 -   PWA support
