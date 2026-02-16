@@ -1,69 +1,120 @@
-# React + TypeScript + Vite
+# Mighty Verbs
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Mighty Verbs** is a modern full-stack web application for learning
+German irregular verbs.\
+The project focuses on clean architecture, scalable structure, and a
+distraction-free learning experience.
 
-Currently, two official plugins are available:
+------------------------------------------------------------------------
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## Expanding the ESLint configuration
+-   📚 Browse German irregular verbs\
+-   🔍 Filter verbs via query parameters\
+-   🧠 Interactive training mode\
+-   ⚡ Fast and responsive UI\
+-   🔄 Cached and optimized data fetching\
+-   🎯 Minimalistic, focused design
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+------------------------------------------------------------------------
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+# 🖥 Frontend
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+The frontend is built as a modern React SPA with a strong focus on
+scalability and maintainability.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🚀 Tech Stack
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+-   React\
+-   TypeScript\
+-   Vite\
+-   Tailwind CSS\
+-   Zustand\
+-   @tanstack/react-query\
+-   React Router\
+-   Fetch API
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+------------------------------------------------------------------------
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🧠 State Management Approach
+
+### Client State (Zustand)
+
+-   Training mode settings\
+-   UI state\
+-   Local progress
+
+### Server State (React Query)
+
+-   Fetching verbs\
+-   Caching responses\
+-   Background refetching\
+-   Loading & error handling
+
+This separation improves predictability, testability, and scalability.
+
+------------------------------------------------------------------------
+
+## 🏗 Frontend Architecture
+
+src/
+ ├── app/        # App configuration and global providers (React Query, Router, etc.)
+ ├── entries/    # Application bootstrap & routing setup
+ ├── pages/      # Route-level pages
+ ├── features/   # Feature-based modules (verbs, training, etc.)
+ └── shared/     # Shared UI components, hooks, utilities
+
+### Architectural Principles
+
+-   Feature-based structure\
+-   Clear separation of concerns\
+-   Strong typing across layers\
+-   Reusable and composable components\
+-   Clean API abstraction layer
+
+------------------------------------------------------------------------
+
+## 🔌 API Integration
+
+Example endpoints:
+
+    GET /verbs
+    GET /verbs?ids=1,3,7
+
+Environment variable:
+
+    VITE_API_URL=https://your-api-url.com
+
+------------------------------------------------------------------------
+
+# ⚙ Backend
+
+The backend is built using:
+
+-   Hono.js\
+-   Prisma\
+-   PostgreSQL
+
+It provides REST endpoints for retrieving and filtering irregular verbs.
+
+------------------------------------------------------------------------
+
+# 🎯 Project Goals
+
+-   Provide an intuitive tool for learning German irregular verbs\
+-   Maintain production-ready architecture\
+-   Demonstrate modern React patterns\
+-   Ensure scalability for future features:
+    -   Authentication\
+    -   Progress tracking\
+    -   Spaced repetition\
+    -   User accounts
+
+------------------------------------------------------------------------
+
+# 📌 Future Improvements
+
+-   Progress persistence\
+-   User statistics dashboard\
+-   Dark mode\
+-   PWA support
