@@ -16,7 +16,7 @@ function MainPage() {
   };
 
   return (
-    <PageContent className="py-12 xl:py-20 xl:pt-24">
+    <PageContent>
       <div className="flex justify-between gap-8">
         <div className="max-w-[600px] flex flex-col gap-5 justify-center mx-auto xl:mx-0 text-center xl:text-left">
           <h1 className="h1">Learn and practice irregular German verbs</h1>
