@@ -8,14 +8,8 @@ import { PageContent } from "@/app/layout/PageContent";
 
 function RandomVerbsPage() {
   const { studyVerbs, isPending } = useRandomStudyVerbs();
-  const {
-    shuffled,
-    columns,
-    focusApi,
-    learnAgain,
-    repeatIncorrect,
-    setIsLearnAgainShown,
-  } = useStudyVerbsFlow({ verbs: studyVerbs });
+  const { shuffled, columns, focusApi, learnAgain, repeatIncorrect } =
+    useStudyVerbsFlow({ verbs: studyVerbs });
 
   const content = useMemo(() => {
     if (isPending) return <Loader />;
@@ -32,7 +26,6 @@ function RandomVerbsPage() {
       <FeedbackDialog
         onLearnVerbsAgain={learnAgain}
         onRepeatIncorrect={repeatIncorrect}
-        onClose={() => setIsLearnAgainShown(true)}
       />
     </PageContent>
   );
