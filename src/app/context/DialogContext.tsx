@@ -1,51 +1,38 @@
 import { createContext, useContext, useState } from "react";
 
-type DialogType = "feedback";
-
-type FeedbackResults = {
+export type FeedbackResults = {
   correct: number;
   incorrect: number;
   incorrectIds: string[];
 };
 
+type DialogState = { type: "feedback"; data: FeedbackResults } | null;
+
 type DialogContextType = {
-  currentDialog: DialogType | null;
-  feedbackResults: FeedbackResults | null;
-  openDialog: (type: DialogType, results?: FeedbackResults) => void;
+  dialog: DialogState;
+  openFeedbackDialog: (results: FeedbackResults) => void;
   closeDialog: () => void;
-  resetFeedbackResults: () => void;
 };
 
 const DialogContext = createContext<DialogContextType | undefined>(undefined);
 
 export const DialogProvider = ({ children }: React.PropsWithChildren) => {
-  const [currentDialog, setCurrentDialog] = useState<DialogType | null>(null);
-  const [feedbackResults, setFeedbackResults] =
-    useState<FeedbackResults | null>(null);
+  const [dialog, setDialog] = useState<DialogState>(null);
 
-  const openDialog = ((type: DialogType, results: FeedbackResults) => {
-    setCurrentDialog(type);
-    if (type === "feedback" && results) {
-      setFeedbackResults(results);
-    }
-  }) as DialogContextType["openDialog"];
-
-  const closeDialog = () => {
-    setCurrentDialog(null);
+  const openFeedbackDialog = (results: FeedbackResults) => {
+    setDialog({ type: "feedback", data: results });
   };
 
-  const resetFeedbackResults = () => {
-    setFeedbackResults(null);
+  const closeDialog = () => {
+    setDialog(null);
   };
 
   return (
     <DialogContext.Provider
       value={{
-        currentDialog,
-        feedbackResults,
-        openDialog,
+        dialog,
+        openFeedbackDialog,
         closeDialog,
-        resetFeedbackResults,
       }}
     >
       {children}

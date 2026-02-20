@@ -17,32 +17,37 @@ import { HomeIcon, RepeatIcon, X as CrossIcon } from "lucide-react";
 type FeedbackDialogProps = {
   onLearnVerbsAgain: () => void;
   onRepeatIncorrect: () => void;
-  onClose: () => void;
 };
 
 export function FeedbackDialog({
   onLearnVerbsAgain,
   onRepeatIncorrect,
-  onClose,
 }: FeedbackDialogProps) {
   const navigate = useNavigate();
-  const { currentDialog, feedbackResults, closeDialog } = useDialogContext();
+  const { dialog, closeDialog } = useDialogContext();
+
+  if (!dialog || dialog.type !== "feedback") return null;
+
+  const feedbackResults = dialog.data;
 
   const handleOpenAllVerbsPage = () => {
     navigate(ROUTES.VERBS);
     closeDialog();
   };
 
-  if (currentDialog !== "feedback" || !feedbackResults) return null;
-
   return (
-    <AlertDialog open>
+    <AlertDialog
+      open={!!dialog}
+      onOpenChange={(open) => {
+        if (!open) closeDialog();
+      }}
+    >
       <AlertDialogContent>
         <AlertDialogHeader>
           <Button
-            className="w-8 h-8 p-0 absolute right-3 top-2 cursor-pointer"
+            className="w-8 h-8 p-0 absolute right-3 top-2"
             variant="ghost"
-            onClick={onClose}
+            onClick={closeDialog}
           >
             <CrossIcon className="h-4 w-4" />
           </Button>
@@ -60,24 +65,20 @@ export function FeedbackDialog({
           <p>❌ Falsche Antworten: {feedbackResults.incorrect}</p>
         </div>
 
-        <AlertDialogFooter className="flex sm:flex-col sm:justify-center mt-4 gap-2">
+        <AlertDialogFooter className="flex sm:flex-col mt-4 gap-2">
           {feedbackResults.incorrect > 0 && (
-            <Button className="cursor-pointer" onClick={onRepeatIncorrect}>
+            <Button onClick={onRepeatIncorrect}>
+              <RepeatIcon />
               Repeat only incorrect verbs
             </Button>
           )}
-          <AlertDialogAction
-            className="cursor-pointer"
-            onClick={onLearnVerbsAgain}
-          >
+
+          <AlertDialogAction onClick={onLearnVerbsAgain}>
             <RepeatIcon />
             Learn verbs again
           </AlertDialogAction>
 
-          <AlertDialogAction
-            className="cursor-pointer"
-            onClick={handleOpenAllVerbsPage}
-          >
+          <AlertDialogAction onClick={handleOpenAllVerbsPage}>
             <HomeIcon />
             All verbs
           </AlertDialogAction>

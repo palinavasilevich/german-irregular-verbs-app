@@ -8,9 +8,11 @@ import { Button } from "@/shared/ui/kit/button";
 import { RepeatIcon } from "lucide-react";
 import { useStudyVerbsFlow } from "@/features/study-verbs/model/useStudyVerbsFlow";
 import { PageContent } from "@/app/layout/PageContent";
+import { useDialogContext } from "@/app/context/DialogContext";
 
 export function StudyVerbsPage() {
   const location = useLocation();
+
   const verbsIds = useMemo(() => {
     const ids = new URLSearchParams(location.search).get("ids") || "";
     return ids.split(",").filter(Boolean);
@@ -18,30 +20,31 @@ export function StudyVerbsPage() {
 
   const { data: verbs, isPending } = useGetVerbsByIdsQuery(verbsIds);
 
-  const {
-    shuffled,
-    columns,
-    focusApi,
-    feedbackResults,
-    learnAgain,
-    repeatIncorrect,
-    isLearnAgainShown,
-    setIsLearnAgainShown,
-  } = useStudyVerbsFlow({ verbs });
+  const { shuffled, columns, focusApi, learnAgain, repeatIncorrect } =
+    useStudyVerbsFlow({ verbs });
+
+  const { dialog } = useDialogContext();
 
   if (isPending) return <Loader />;
 
+  const isFeedbackDialogOpen = dialog?.type === "feedback";
+
+  const incorrectCount =
+    dialog?.type === "feedback" ? dialog.data.incorrect : 0;
+
   return (
     <PageContent title="Study Verbs">
-      {isLearnAgainShown && (
+      {!isFeedbackDialogOpen && dialog?.type === "feedback" && (
         <div className="flex gap-4 mb-6">
-          {feedbackResults && feedbackResults?.incorrect > 0 && (
+          {incorrectCount > 0 && (
             <Button onClick={repeatIncorrect}>
-              <RepeatIcon /> Repeat only incorrect verbs
+              <RepeatIcon />
+              Repeat only incorrect verbs
             </Button>
           )}
           <Button onClick={learnAgain}>
-            <RepeatIcon /> Learn verbs again
+            <RepeatIcon />
+            Learn verbs again
           </Button>
         </div>
       )}
@@ -49,7 +52,6 @@ export function StudyVerbsPage() {
       <StudyVerbsTable data={shuffled} columns={columns} focusApi={focusApi} />
 
       <FeedbackDialog
-        onClose={() => setIsLearnAgainShown(true)}
         onLearnVerbsAgain={learnAgain}
         onRepeatIncorrect={repeatIncorrect}
       />

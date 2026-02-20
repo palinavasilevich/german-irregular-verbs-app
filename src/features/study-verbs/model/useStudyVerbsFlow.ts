@@ -12,17 +12,15 @@ type UseStudyVerbsFlowProps = {
 
 export function useStudyVerbsFlow({ verbs }: UseStudyVerbsFlowProps) {
   const [shuffled, setShuffled] = useState<ApiSchemas["Verb"][]>([]);
-  const [isFeedbackShown, setIsFeedbackShown] = useState(false);
   const [shouldFocus, setShouldFocus] = useState(false);
-  const [isLearnAgainShown, setIsLearnAgainShown] = useState(false);
-
   const [completedCount, setCompletedCount] = useState(0);
+
+  const [isRoundFinished, setIsRoundFinished] = useState(false);
 
   const focusApi = useFocusInputControl();
   const { focusFirstUnfilled, getResults, resetInputs } = focusApi;
 
-  const { feedbackResults, openDialog, closeDialog, resetFeedbackResults } =
-    useDialogContext();
+  const { dialog, openFeedbackDialog, closeDialog } = useDialogContext();
 
   const totalInputs = useMemo(
     () => shuffled.length * HEADERS.length,
@@ -35,12 +33,10 @@ export function useStudyVerbsFlow({ verbs }: UseStudyVerbsFlowProps) {
 
   const { columns } = useTableColumns(focusApi, handleInputComplete);
 
-  // shuffle on first load / when verbs change
   useEffect(() => {
     if (verbs?.length) {
       setShuffled(shuffle(verbs));
       setShouldFocus(true);
-      setIsFeedbackShown(false);
       setCompletedCount(0);
     } else {
       setShuffled([]);
@@ -48,18 +44,22 @@ export function useStudyVerbsFlow({ verbs }: UseStudyVerbsFlowProps) {
     }
   }, [verbs]);
 
-  // show feedback dialog
   useEffect(() => {
-    if (isFeedbackShown) return;
     if (totalInputs === 0) return;
-    if (completedCount < totalInputs) return;
+    if (completedCount !== totalInputs) return;
+    if (isRoundFinished) return;
 
     const results = getResults();
-    openDialog("feedback", results);
-    setIsFeedbackShown(true);
-  }, [completedCount, totalInputs, isFeedbackShown, getResults, openDialog]);
+    openFeedbackDialog(results);
+    setIsRoundFinished(true);
+  }, [
+    completedCount,
+    totalInputs,
+    isRoundFinished,
+    getResults,
+    openFeedbackDialog,
+  ]);
 
-  // focus on first empty
   useEffect(() => {
     if (shouldFocus && shuffled.length > 0) {
       const t = setTimeout(() => {
@@ -72,10 +72,9 @@ export function useStudyVerbsFlow({ verbs }: UseStudyVerbsFlowProps) {
 
   const resetRoundCommon = () => {
     resetInputs();
-    resetFeedbackResults();
-    setIsFeedbackShown(false);
     setCompletedCount(0);
     setShouldFocus(true);
+    setIsRoundFinished(false);
     closeDialog();
   };
 
@@ -85,8 +84,10 @@ export function useStudyVerbsFlow({ verbs }: UseStudyVerbsFlowProps) {
   };
 
   const repeatIncorrect = () => {
-    const incorrect = feedbackResults?.incorrectIds || [];
-    const next = (verbs || []).filter((v) => incorrect.includes(v.id));
+    if (!dialog || dialog.type !== "feedback") return;
+
+    const incorrectIds = dialog.data.incorrectIds;
+    const next = (verbs || []).filter((v) => incorrectIds.includes(v.id));
 
     resetRoundCommon();
     setShuffled(shuffle(next));
@@ -96,10 +97,7 @@ export function useStudyVerbsFlow({ verbs }: UseStudyVerbsFlowProps) {
     shuffled,
     columns,
     focusApi,
-    feedbackResults,
-    isLearnAgainShown,
     learnAgain,
     repeatIncorrect,
-    setIsLearnAgainShown,
   };
 }
