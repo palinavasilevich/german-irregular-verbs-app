@@ -13,15 +13,15 @@ function AllVerbsPage() {
     withSorting: true,
   });
 
-  let content;
-
   if (isPending) {
-    content = <Loader />;
-  } else {
-    content = <AllVerbsTable data={verbs} columns={columns} />;
+    return <Loader />;
   }
 
-  return <PageContent title="Irregular German Verbs">{content}</PageContent>;
+  return (
+    <PageContent title="Irregular German Verbs">
+      <AllVerbsTable data={verbs} columns={columns} />
+    </PageContent>
+  );
 }
 
 export const Component = AllVerbsPage;
