@@ -8,6 +8,7 @@ import { ROUTES } from "@/app/router/routes";
 
 import cls from "./Header.module.css";
 import { LogoIcon } from "./LogoIcon";
+import { ThemeToggler } from "@/shared/ui/ThemeToggler/ThemeToggler";
 
 export function Header() {
   const location = useLocation();
@@ -20,16 +21,14 @@ export function Header() {
   };
 
   return (
-    <header className="bg-white border-b border-border/40 shadow-sm py-2">
+    <header className="bg-background border-b border-border/40 shadow-sm py-2">
       <Container className="h-20 flex items-center justify-between">
         <Link
           to={ROUTES.HOME}
           className="flex flex-col items-center group transition-transform duration-200 hover:-translate-y-0.5"
         >
-          <LogoIcon width={50} height={50} className={cls.logo} />
-          <span className="text-gray-900 font-semibold text-lg">
-            Mighty Verbs
-          </span>
+          <LogoIcon width={50} height={50} className="fill-current" />
+          <span className="font-semibold text-lg">Mighty Verbs</span>
         </Link>
 
         <nav className="flex items-center gap-6 text-sm">
@@ -55,6 +54,8 @@ export function Header() {
           >
             Learn Random Verbs
           </Button>
+
+          <ThemeToggler className="text-xs" />
         </nav>
       </Container>
     </header>
