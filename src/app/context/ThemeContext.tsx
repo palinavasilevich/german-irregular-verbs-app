@@ -1,3 +1,4 @@
+import { THEME_STORAGE_KEY } from "@/shared/constants";
 import { useLocalStorage } from "@/shared/utils/useLocalStorage";
 import {
   createContext,
@@ -24,7 +25,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     storedValue: theme,
     setValue: setTheme,
     getValue,
-  } = useLocalStorage<Theme>("theme", "light");
+  } = useLocalStorage<Theme>(THEME_STORAGE_KEY, "light");
 
   useLayoutEffect(() => {
     document.documentElement.classList.toggle("dark", getValue() === "dark");
@@ -34,7 +35,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const handleChange = (event: MediaQueryListEvent) => {
-      const saved = localStorage.getItem("theme");
+      const saved = localStorage.getItem(THEME_STORAGE_KEY);
       if (!saved) {
         const newTheme: Theme = event.matches ? "dark" : "light";
         setTheme(newTheme);

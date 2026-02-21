@@ -38,8 +38,8 @@ function MainPage() {
           </div>
         </div>
         <div className="hidden xl:flex">
-          <div className="w-[450px] h-[400px] bg-no-repeat relative bg-bottom">
-            <img src={heroImg} alt="hero_image" />
+          <div>
+            <img src={heroImg} alt="hero_image" width={450} height={400} />
           </div>
         </div>
       </div>
