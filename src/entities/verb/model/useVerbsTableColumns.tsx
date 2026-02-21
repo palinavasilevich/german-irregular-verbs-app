@@ -53,6 +53,9 @@ export function useVerbsTableColumns({
           />
         );
       },
+      size: 48,
+      minSize: 48,
+      maxSize: 48,
       enableSorting: false,
       enableHiding: false,
     });

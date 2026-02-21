@@ -24,7 +24,7 @@ export function useTableColumns(
         ),
         cell: ({ row }: CellContext<ApiSchemas["Verb"], unknown>) => {
           const correctAnswer = String(row.getValue(accessorKey));
-          const rowId = row.original.id; // как у тебя было
+          const rowId = row.original.id;
 
           return (
             <VerbInput

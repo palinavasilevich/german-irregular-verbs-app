@@ -91,15 +91,17 @@ export function AllVerbsTable<TData, TValue>({
         />
       }
     >
-      {/* <div className="w-full flex flex-col h-[60dvh] mb-2"> */}
       <div className="w-full flex flex-col mb-2">
         <div className="overflow-hidden rounded-md border flex flex-col">
-          <Table>
+          <Table className="w-full table-fixed">
             <TableHeader className="sticky top-0 z-10 bg-background shadow-2xs">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      style={{ width: header.getSize() }}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -119,7 +121,10 @@ export function AllVerbsTable<TData, TValue>({
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
+                      <TableCell
+                        key={cell.id}
+                        style={{ width: cell.column.getSize() }}
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext(),
